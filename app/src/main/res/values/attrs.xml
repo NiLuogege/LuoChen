@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CircleTextView">
+        <attr name="roundColor" format="color" />
+        <attr name="roundWidth" format="dimension"></attr>
+        <attr name="roundTextColor" format="color" />
+        <attr name="roundTextSize" format="dimension" />
+        <attr name="roundText" format="string"></attr>
+    </declare-styleable>
+    
+    <declare-styleable name="roundedimageview">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color"></attr>
+    </declare-styleable>
+    <declare-styleable name="labelLayout">
+        <attr name="label_data" format="string"></attr>
+    </declare-styleable>
+    <declare-styleable name="weight_layout">
+        <attr name="avg" format="string"></attr>
+    </declare-styleable>
+
+	<!-- 圆形头像 -->
+     <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="border_overlay" format="boolean" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/rl_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <com.example.well.luochen.view.RoundImageView
+                android:id="@+id/iv_profileImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="停车做爱枫林晚"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/tv_createTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2016-06-20  15:36"
+                    android:textSize="8dp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="15dp"
+                android:src="@drawable/yan"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="原来这都是以昂就会放大法"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+        <!--这里就是各种分类-->
+        <FrameLayout
+            android:id="@+id/fl_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="200dp"
+                />
+
+            <com.example.well.luochen.jcvideoplayer.JCVideoPlayerStandard
+                android:id="@+id/JCVP_S"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.like.LikeButton
+                    android:id="@+id/heart_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:anim_scale_factor="3"
+                    app:icon_size="16dp"
+                    app:like_drawable="@drawable/ding_not_clicked"
+                    app:unlike_drawable="@drawable/cai_not_clicked"/>
+
+                <TextView
+                    android:id="@+id/tv_love"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="2470"/>
+
+            </LinearLayout>
+
+
+            <View style="@style/line_vertical_padding"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_hate"
+                style="@style/activity_main_zan"
+                android:drawableLeft="@drawable/cai_not_clicked"
+                android:text="2470"/>
+
+            <View style="@style/line_vertical_padding"/>
+
+            <TextView
+                android:id="@+id/tv_share"
+                style="@style/activity_main_zan"
+                android:drawableLeft="@drawable/forward"
+                android:text="2470"/>
+
+            <View style="@style/line_vertical_padding"/>
+
+            <TextView
+                android:id="@+id/tv_comment"
+                style="@style/activity_main_zan"
+                android:drawableLeft="@drawable/commend"
+                android:text="2470"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
