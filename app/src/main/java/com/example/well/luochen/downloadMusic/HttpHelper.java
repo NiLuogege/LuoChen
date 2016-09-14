@@ -30,6 +30,7 @@ public class HttpHelper {
 
 	/** get请求，获取返回字符串内容 */
 	public static HttpResult get(String url) {
+
 		HttpGet httpGet = new HttpGet(url);
 
 		return execute(url, httpGet);
