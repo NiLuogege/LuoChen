@@ -89,6 +89,8 @@ public class MusicDetailActivity extends BaseActivity implements AdapterView.OnI
     }
 
     private void initData() {
+        if (position==0)
+            return;
         switch (position - 1) {//这里减一是一位上一个 list添加了一个头所以position 不对
             case 0://民谣
                 topId = 18;
@@ -194,11 +196,15 @@ public class MusicDetailActivity extends BaseActivity implements AdapterView.OnI
         requestGet(RequestWhat.What_2, url, BsMusicResponse.class, new HttpListener<BsMusicResponse>() {
             @Override
             public void onSucceed(int what, Response<BsMusicResponse> response) {
-                LogUtils.logError("歌曲" + response.get().showapi_res_body.pagebean.songlist.toString());
-                mSonglist = response.get().showapi_res_body.pagebean.songlist;
-                mACache.put("Music" + (position - 1), mSonglist);
-                LogUtils.logError("缓存时候的" + "   Music" + (position - 1));
-                lv_music_detail.setAdapter(new MusicDetailAdapter());
+                if (null!=response)
+                {
+                    LogUtils.logError("歌曲" + response.get().showapi_res_body.pagebean.songlist.toString());
+                    mSonglist = response.get().showapi_res_body.pagebean.songlist;
+                    mACache.put("Music" + (position - 1), mSonglist);
+                    LogUtils.logError("缓存时候的" + "   Music" + (position - 1));
+                    lv_music_detail.setAdapter(new MusicDetailAdapter());
+                }
+
             }
 
             @Override
