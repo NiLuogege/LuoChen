@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">落尘</string>
-    <string name="title_activity_main2">Main2Activity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="tips_not_wifi">您当前正在使用移动网络，继续播放将消耗流量</string>
     <string name="tips_not_wifi_confirm">继续播放</string>

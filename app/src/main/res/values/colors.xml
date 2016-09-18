@@ -2,16 +2,10 @@
 <resources>
     <color name="colorAccent">#FF4081</color>//主色调
 
-    <color name="TitalBar">#FF69B4</color>
     <!--<color name="TitalBar">#FFB6C1</color>//主色调-->
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-
-    <color name="main_color">#ff5dbde1</color>
-    <color name="main_text_select">#ff5dbde1</color>
-    <color name="main_text_normal">#ff9ba4ae</color>
-    <color name="window_bg">#fffdfcf5</color>
 
     <color name="black">#5e6b7b</color>
     <color name="line_gray">#d9d9d9</color>
