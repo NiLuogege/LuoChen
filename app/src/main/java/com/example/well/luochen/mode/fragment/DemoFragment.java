@@ -62,7 +62,8 @@ public class DemoFragment extends BaseFragment {
         DownloadManager instance = DownloadManager.getInstance();
         DownloadInfo downloadInfo = new DownloadInfo();
 //        downloadInfo.setDownloadURL("http://dl.stream.qqmusic.qq.com/104133518.mp3");
-        downloadInfo.setDownloadURL("http://dl.stream.qqmusic.qq.com/104133518.mp3?vkey=29BE148294ECB70F7D1410DE8C3489C246D8363571BE1BD4A559F963087B93A32BAC00A70F285AFC82D38A1C0838708B95D0E5F693B29853&amp;guid=2718671044");
+//        downloadInfo.setDownloadURL("http://stream10.qqmusic.qq.com/34833285.mp3");
+        downloadInfo.setDownloadURL("http://ws.stream.qqmusic.qq.com/4833285.m4a?fromtag=46");
         downloadInfo= DownloadInfo.downloadPath(downloadInfo);
         instance.download(downloadInfo);
     }

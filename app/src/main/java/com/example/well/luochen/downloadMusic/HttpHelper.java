@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 
 public class HttpHelper {
-//Text
+//DEMO
 	public static final String URL = "http://127.0.0.1:8090/";
 
 	/** get请求，获取返回字符串内容 */
