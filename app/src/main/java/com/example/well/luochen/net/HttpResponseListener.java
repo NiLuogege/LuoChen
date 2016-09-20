@@ -161,7 +161,9 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
         } else {
             showToast("未知错误。");
         }
+        if (null !=exception.getMessage())
     	LogUtils.logError(exception.getMessage());
+
         if (callback != null)
             callback.onFailed(what, url, tag, exception, responseCode, networkMillis);
     }

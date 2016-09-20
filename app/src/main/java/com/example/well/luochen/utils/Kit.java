@@ -1,6 +1,10 @@
 package com.example.well.luochen.utils;
 
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.util.DisplayMetrics;
+
+import com.example.well.luochen.MyApplication;
 
 /**
  * Created by Well on 2016/6/21.
@@ -32,5 +36,13 @@ public class Kit {
         } else {
             return dp;
         }
+    }
+
+    public static Point getDisplayScreenMetrics() {
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = MyApplication.getInstance().getResources().getDisplayMetrics();
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        return new Point(screenWidth ,screenHeight );
     }
 }

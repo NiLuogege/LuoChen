@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
 
 <!--shareSDK 所需部分权限-->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -30,6 +31,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <activity
             android:name=".mode.activity.MainActivity_"
             android:screenOrientation="portrait"

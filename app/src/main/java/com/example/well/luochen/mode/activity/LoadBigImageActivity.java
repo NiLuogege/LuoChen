@@ -1,7 +1,5 @@
 package com.example.well.luochen.mode.activity;
 
-import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -9,6 +7,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.well.luochen.R;
 import com.example.well.luochen.utils.LogUtils;
+import com.example.well.luochen.view.PinchImageView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -24,7 +23,7 @@ public class LoadBigImageActivity extends BaseActivity {
     String url;
 
     @ViewById
-    ImageView iv;
+    PinchImageView iv;
 
     @AfterViews
     void initAfterViews()
@@ -34,6 +33,7 @@ public class LoadBigImageActivity extends BaseActivity {
         Glide.with(LoadBigImageActivity.this).load(url).error(R.drawable.he).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                if (null!=e)
                 LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
                 return false;
             }

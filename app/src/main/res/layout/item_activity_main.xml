@@ -64,11 +64,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <com.example.well.luochen.view.PinchImageView
                 android:id="@+id/item_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="200dp"
                 />
 
             <com.example.well.luochen.jcvideoplayer.JCVideoPlayerStandard
@@ -106,7 +105,8 @@
                     android:id="@+id/tv_love"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="8dp"
+                    android:singleLine="true"
                     android:text="2470"/>
 
             </LinearLayout>
@@ -128,7 +128,7 @@
                 android:id="@+id/tv_share"
                 style="@style/activity_main_zan"
                 android:drawableLeft="@drawable/forward"
-                android:text="2470"/>
+                android:text="200"/>
 
             <View style="@style/line_vertical_padding"/>
 
@@ -136,7 +136,7 @@
                 android:id="@+id/tv_comment"
                 style="@style/activity_main_zan"
                 android:drawableLeft="@drawable/commend"
-                android:text="2470"/>
+                android:text="200"/>
         </LinearLayout>
     </LinearLayout>
 

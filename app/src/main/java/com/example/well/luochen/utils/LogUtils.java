@@ -21,6 +21,7 @@ public class LogUtils {
 	
 	public static void logError(String msg){
 		if(!showLog) return;
+		if (null==msg) return;
 		Log.e(Tag, msg);
 	}
 	
