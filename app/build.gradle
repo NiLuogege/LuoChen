@@ -42,7 +42,7 @@ dependencies {
 //    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
 //    compile 'com.github.danylovolokh:video-player-manager:0.2.0'
 //    compile 'com.github.danylovolokh:list-visibility-utils:0.2.0'
-//    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'com.android.support:support-v4:23.4.0'
 //    compile 'com.google.android.gms:play-services:8.4.0'
     testCompile 'junit:junit:4.12'
