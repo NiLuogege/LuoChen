@@ -94,12 +94,14 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
         FragmentManager sfm = mActivity.getSupportFragmentManager();
 
         ArrayList<Fragment> list = new ArrayList<>();
+        com.example.well.luochen.mode.fragment.ImageFragment ImageFragment = ImageFragment_.builder().build();
         MusicFragment_ musicFragment_ = new MusicFragment_();
         BDJFragment_ bdjFragment = new BDJFragment_();
         DemoFragment_ demoFragment1 = new DemoFragment_();
         DemoFragment_ demoFragment2 = new DemoFragment_();
         DemoFragment_ demoFragment3 = new DemoFragment_();
 
+        list.add(ImageFragment);
         list.add(musicFragment_);
         list.add(bdjFragment);
         list.add(demoFragment1);

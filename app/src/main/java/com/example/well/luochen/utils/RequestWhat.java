@@ -7,4 +7,5 @@ package com.example.well.luochen.utils;
 public class RequestWhat {
     public static int What_1=1;
     public static int What_2=2;
+    public static int What_3=3;
 }

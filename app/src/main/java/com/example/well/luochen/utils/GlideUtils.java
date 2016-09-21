@@ -1,13 +1,13 @@
 package com.example.well.luochen.utils;
 
 import android.content.Context;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.rey.material.widget.ImageView;
 
 /**
  * Created by Well on 2016/9/20.

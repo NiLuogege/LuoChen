@@ -19,5 +19,9 @@ public interface URLUtils {
      * 音乐接口
      */
     String URL_MUSIC="http://route.showapi.com/213-4";
+    /**
+     * 美女图片接口
+     */
+    String URL_MV="http://route.showapi.com/197-1";
 
 }
