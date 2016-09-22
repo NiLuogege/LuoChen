@@ -18,6 +18,7 @@ public class GlideUtils {
         Glide.with(context).load(url).dontAnimate().error(onErrorDrawable).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                if (null!=e)
                 LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
                 return false;
             }

@@ -31,6 +31,7 @@ public class MainActivity extends BaseActivity {
 
     @AfterViews
     void initAfterViews() {
+        app.setSystemBar(this, R.color.colorAccent);
         ShareSDK.initSDK(MainActivity.this, "151e371cdec24");
 
         initFragment();

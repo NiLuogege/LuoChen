@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.well.luochen.MyApplication;
-import com.example.well.luochen.R;
 import com.example.well.luochen.net.HttpListener;
 import com.example.well.luochen.net.NoHttpRequest;
 import com.example.well.luochen.utils.ACache;
@@ -37,7 +36,6 @@ public class BaseActivity extends FragmentActivity implements TitleBar.TitleCall
 		super.onCreate(savedInstanceState);
 		app = (MyApplication) getApplication();
 		context = this;
-		app.setSystemBar(this, R.color.colorAccent);
 		mACache = ACache.get(this);
 		
 		registerReceiver(broadcastReceiver, new IntentFilter("close"));

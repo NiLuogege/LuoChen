@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 
 import com.example.well.luochen.R;
@@ -23,6 +24,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
+
 /**
  * Created by Well on 2016/9/21.
  */
@@ -30,20 +33,22 @@ import java.util.ArrayList;
 public class MVImageActivity extends BaseActivity {
     @ViewById
     RecyclerView list_rv;
+    @ViewById
+    ImageView iv_bg;
 
     private int page = 1;
     private ArrayList<MVImageInfo> mNewslist;
     private MVImageAdapter mAdapter;
-
     @AfterViews
     void initAfterView() {
         list_rv.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        list_rv.addItemDecoration(new SpacesItemDecoration(16));
+        list_rv.addItemDecoration(new SpacesItemDecoration(10));
+        iv_bg.setImageResource(R.drawable.login_register_bg);
         initData();
     }
 
     private void initData() {
-        String url = String.format(URLUtils.URL_MV + "?showapi_appid=20775&num=20&page=%s&showapi_sign=d159d4a9edd649c9b669386b0170babc", page);
+        String url = String.format(URLUtils.URL_MV + "?showapi_appid=20775&num=50&page=%s&showapi_sign=d159d4a9edd649c9b669386b0170babc", page);
         requestGet(RequestWhat.What_3, url, MVImageResponse.class, new HttpListener<MVImageResponse>() {
             @Override
             public void onSucceed(int what, Response<MVImageResponse> response) {
@@ -55,10 +60,16 @@ public class MVImageActivity extends BaseActivity {
                         if (code == 200)//访问成功
                         {
                             mNewslist = showapi_res_body.newslist;
+//                            MVImageInfo mvImageInfo = mNewslist.get(1);
+//                            GlideUtils.displayImageView(MVImageActivity.this,mvImageInfo.picUrl,iv_bg,R.drawable.he);
 
                             if (null==mAdapter){
                                 mAdapter = new MVImageAdapter();
-                                list_rv.setAdapter(mAdapter);
+                                SlideInLeftAnimationAdapter adapter = new SlideInLeftAnimationAdapter(mAdapter);
+                                adapter.setFirstOnly(false);
+                                adapter.setDuration(800);
+                                adapter.setInterpolator(new OvershootInterpolator(.5f));
+                                list_rv.setAdapter(adapter);
                             }else{
                                 mAdapter.notifyDataSetChanged();
                             }

@@ -13,4 +13,7 @@
     <color name="color_1">#f6f5ec</color>
     <color name="color_2">#77ac98</color>
     <color name="color_3">#007947</color>
+    <color name="color_HotPink">#FF69B4</color>
+    <color name="transparency">#00ffffff</color>
+
 </resources>
