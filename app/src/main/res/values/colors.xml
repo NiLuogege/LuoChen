@@ -15,5 +15,6 @@
     <color name="color_3">#007947</color>
     <color name="color_HotPink">#FF69B4</color>
     <color name="transparency">#00ffffff</color>
+    <color name="color_lightCyan">#E1FFFF</color>
 
 </resources>

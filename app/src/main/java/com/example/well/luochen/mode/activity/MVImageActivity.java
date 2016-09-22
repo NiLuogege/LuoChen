@@ -2,9 +2,13 @@ package com.example.well.luochen.mode.activity;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
 import com.example.well.luochen.R;
@@ -16,9 +20,11 @@ import com.example.well.luochen.utils.GlideUtils;
 import com.example.well.luochen.utils.RequestWhat;
 import com.example.well.luochen.utils.SpacesItemDecoration;
 import com.example.well.luochen.utils.URLUtils;
+import com.example.well.luochen.view.PinchImageView;
 import com.yolanda.nohttp.rest.Response;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -35,13 +41,18 @@ public class MVImageActivity extends BaseActivity {
     RecyclerView list_rv;
     @ViewById
     ImageView iv_bg;
+    @ViewById
+    PinchImageView iv_fg;
 
     private int page = 1;
     private ArrayList<MVImageInfo> mNewslist;
     private MVImageAdapter mAdapter;
+    private float mRawX;
+    private float mRawY;
+
     @AfterViews
     void initAfterView() {
-        list_rv.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        list_rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         list_rv.addItemDecoration(new SpacesItemDecoration(10));
         iv_bg.setImageResource(R.drawable.login_register_bg);
         initData();
@@ -63,14 +74,14 @@ public class MVImageActivity extends BaseActivity {
 //                            MVImageInfo mvImageInfo = mNewslist.get(1);
 //                            GlideUtils.displayImageView(MVImageActivity.this,mvImageInfo.picUrl,iv_bg,R.drawable.he);
 
-                            if (null==mAdapter){
+                            if (null == mAdapter) {
                                 mAdapter = new MVImageAdapter();
                                 SlideInLeftAnimationAdapter adapter = new SlideInLeftAnimationAdapter(mAdapter);
                                 adapter.setFirstOnly(false);
                                 adapter.setDuration(800);
                                 adapter.setInterpolator(new OvershootInterpolator(.5f));
                                 list_rv.setAdapter(adapter);
-                            }else{
+                            } else {
                                 mAdapter.notifyDataSetChanged();
                             }
 
@@ -91,6 +102,57 @@ public class MVImageActivity extends BaseActivity {
         }, true);
     }
 
+    @Click
+    void iv_fg() {
+        dismissImageView();
+    }
+
+    private void dismissImageView() {
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF,0.5f);
+        scaleAnimation.setDuration(300);
+        scaleAnimation.setFillAfter(false);
+        iv_fg.startAnimation(scaleAnimation);
+        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                int visibility = iv_fg.getVisibility();
+                if (visibility == View.VISIBLE)
+                    iv_fg.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            int visibility = iv_fg.getVisibility();
+            if (visibility == View.VISIBLE) {
+                dismissImageView();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        mRawX = ev.getRawX();
+        mRawY = ev.getRawY();
+        return super.dispatchTouchEvent(ev);
+    }
+
     public class MVImageAdapter extends RecyclerView.Adapter<MVImageAdapter.ViewHolder> {
 
 
@@ -101,9 +163,23 @@ public class MVImageActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position) {
             MVImageInfo mvImageInfo = mNewslist.get(position);
-            GlideUtils.displayImageView(MVImageActivity.this,mvImageInfo.picUrl,holder.mIv_item,R.drawable.he);
+            final String url = mvImageInfo.picUrl;
+            GlideUtils.displayImageView(MVImageActivity.this, url, holder.mIv_item, R.drawable.he);
+
+            holder.mIv_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iv_fg.setVisibility(View.VISIBLE);
+                    GlideUtils.displayImageView(MVImageActivity.this, url, iv_fg, R.drawable.he);
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,mRawX,mRawX);
+                    scaleAnimation.setDuration(500);
+                    scaleAnimation.setFillAfter(false);
+                    iv_fg.startAnimation(scaleAnimation);
+
+                }
+            });
         }
 
         @Override
@@ -117,7 +193,7 @@ public class MVImageActivity extends BaseActivity {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                 mIv_item = (ImageView) itemView.findViewById(R.id.iv_item);
+                mIv_item = (ImageView) itemView.findViewById(R.id.iv_item);
             }
         }
     }
