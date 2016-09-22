@@ -104,8 +104,16 @@ public class MVImageActivity extends BaseActivity {
 
     @Click
     void iv_fg() {
-        dismissImageView();
+        int visibility = iv_fg.getVisibility();
+        if (visibility == View.VISIBLE)
+        {
+            if (!isDismissImageIng)
+                dismissImageView();
+        }
+
     }
+
+    private boolean isDismissImageIng;
 
     private void dismissImageView() {
         ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF,0.5f);
@@ -115,13 +123,12 @@ public class MVImageActivity extends BaseActivity {
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                isDismissImageIng=true;
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                int visibility = iv_fg.getVisibility();
-                if (visibility == View.VISIBLE)
+                isDismissImageIng=false;
                     iv_fg.setVisibility(View.GONE);
             }
 
@@ -137,6 +144,7 @@ public class MVImageActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             int visibility = iv_fg.getVisibility();
             if (visibility == View.VISIBLE) {
+                if (!isDismissImageIng)
                 dismissImageView();
             } else {
                 finish();
@@ -173,11 +181,10 @@ public class MVImageActivity extends BaseActivity {
                 public void onClick(View v) {
                     iv_fg.setVisibility(View.VISIBLE);
                     GlideUtils.displayImageView(MVImageActivity.this, url, iv_fg, R.drawable.he);
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,mRawX,mRawX);
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1,mRawX,mRawY);
                     scaleAnimation.setDuration(500);
                     scaleAnimation.setFillAfter(false);
                     iv_fg.startAnimation(scaleAnimation);
-
                 }
             });
         }

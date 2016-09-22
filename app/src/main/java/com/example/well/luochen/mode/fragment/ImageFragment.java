@@ -1,6 +1,5 @@
 package com.example.well.luochen.mode.fragment;
 
-import android.content.Intent;
 import android.widget.ImageView;
 
 import com.example.well.luochen.R;
@@ -37,7 +36,7 @@ public class ImageFragment extends BaseFragment {
 
     @Click
     void iv_mv() {
-        startActivity(new Intent(mActivity, MVImageActivity_.class));
+        MVImageActivity_.intent(mActivity).start();
     }
 
     @Click
