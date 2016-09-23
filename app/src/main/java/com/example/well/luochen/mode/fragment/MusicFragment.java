@@ -76,7 +76,7 @@ public class MusicFragment extends BaseFragment implements AdapterView.OnItemCli
         LogUtils.logError("随机数" + i);
 
         if (!topIdList.contains(i + "")) {
-            topId = 3;
+            topId = 19;
         } else {
             topId = i;
         }

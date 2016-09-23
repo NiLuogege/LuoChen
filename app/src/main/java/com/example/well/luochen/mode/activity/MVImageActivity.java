@@ -176,7 +176,7 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
 
     private void dismissImageView() {
         ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(300);
+        scaleAnimation.setDuration(200);
         scaleAnimation.setFillAfter(false);
         iv_fg.startAnimation(scaleAnimation);
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {

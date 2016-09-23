@@ -126,42 +126,29 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mFl_type.setVisibility(View.VISIBLE);
             mHolder.mIv_image.setVisibility(View.VISIBLE);
             mHolder.mJCVP_S.setVisibility(View.INVISIBLE);
-
-//            Glide.with(mBdjFragment.mActivity).load(listinfo.image0).dontAnimate().error(R.drawable.icon_moren).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
-//                @Override
-//                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                    LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
-//                    return false;
-//                }
-//
-//                @Override
-//                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                    return false;
-//                }
-//            }).into(mHolder.mIv_image);
-
-           final PinchImageView iv=mHolder.mIv_image;
+            final PinchImageView iv = mHolder.mIv_image;
             final ViewHolder finalMHolder = mHolder;
             Glide
-                    .with( mBdjFragment.mActivity ) // could be an issue!
-                    .load( listinfo.image0)
+                    .with(mBdjFragment.mActivity) // could be an issue!
+                    .load(listinfo.image0)
                     .asBitmap()
                     .error(R.drawable.icon_moren)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .listener(new RequestListener<String, Bitmap>() {
-                          @Override
-                          public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                              if (null!=e&&null!=e.toString())
-                              LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
-                              return false;
-                          }
+                        @Override
+                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                            if (null != e && null != e.toString())
+                                LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
 
-                          @Override
-                          public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                              return false;
-                          }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
                     })
-                    .into( new SimpleTarget<Bitmap>() {
+                    .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             int imageWidth = resource.getWidth();//图片宽度
@@ -173,42 +160,42 @@ public class BDJAdapter extends BaseAdapter {
 
                             ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();//imageView的
                             ViewGroup.LayoutParams lp = finalMHolder.mFl_type.getLayoutParams();//imageView的父控件
-                            if (imageWidth<=x && imageHeight<=y){//一般图片
-                                lp.width= x;
-                                lp.height= x*imageHeight/imageWidth;
+                            if (imageWidth <= x && imageHeight <= y) {//一般图片
+                                lp.width = x;
+                                lp.height = x * imageHeight / imageWidth;
                                 finalMHolder.mFl_type.setLayoutParams(lp);
 
                                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                                layoutParams.width=x;
-                                layoutParams.height=x*imageHeight/imageWidth;
+                                layoutParams.width = x;
+                                layoutParams.height = x * imageHeight / imageWidth;
                                 iv.setLayoutParams(layoutParams);
                                 iv.setImageBitmap(resource);
-                            }else if (imageHeight>y*2.5){//长图
-                                lp.width= x;
-                                lp.height= y/2;
+                            } else if (imageHeight > y * 2.5) {//长图
+                                lp.width = x;
+                                lp.height = y / 2;
                                 finalMHolder.mFl_type.setLayoutParams(lp);
-LogUtils.logError(listinfo.text);
+                                LogUtils.logError(listinfo.text);
                                 iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                layoutParams.width=x;
-                                layoutParams.height=y/2;
+                                layoutParams.width = x;
+                                layoutParams.height = y / 2;
                                 iv.setLayoutParams(layoutParams);
                                 iv.setImageBitmap(resource);
 
-                            }else{
-                                lp.width= x;
-                                lp.height= x*imageHeight/imageWidth;
+                            } else {
+                                lp.width = x;
+                                lp.height = x * imageHeight / imageWidth;
                                 finalMHolder.mFl_type.setLayoutParams(lp);
 
                                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                                layoutParams.width=x;
-                                layoutParams.height=x*imageHeight/imageWidth;
+                                layoutParams.width = x;
+                                layoutParams.height = x * imageHeight / imageWidth;
                                 iv.setLayoutParams(layoutParams);
                                 iv.setImageBitmap(resource);
                             }
-                            LogUtils.logError("x="+x+" y="+y+" width="+resource.getWidth()+" height="+resource.getHeight());
+                            LogUtils.logError("x=" + x + " y=" + y + " width=" + resource.getWidth() + " height=" + resource.getHeight());
 
                         }
-                    } );
+                    });
 
         } else if (TextUtils.equals(listinfo.type, "41"))//视频
         {
@@ -217,8 +204,8 @@ LogUtils.logError(listinfo.text);
             mHolder.mJCVP_S.setVisibility(View.VISIBLE);
 
             ViewGroup.LayoutParams layoutParams = mHolder.mFl_type.getLayoutParams();
-            layoutParams.height= (int) Kit.dp2px(200f,mBdjFragment.mActivity.getResources());
-            layoutParams.width= ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = (int) Kit.dp2px(200f, mBdjFragment.mActivity.getResources());
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
             mHolder.mFl_type.setLayoutParams(layoutParams);
 
             mHolder.mJCVP_S.setUp(listinfo.video_uri, "");

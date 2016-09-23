@@ -26,20 +26,29 @@ public class LoadBigImageActivity extends BaseActivity {
     PinchImageView iv;
 
     @AfterViews
-    void initAfterViews()
-    {
-        Glide.with(LoadBigImageActivity.this).load(url).error(R.drawable.load_failed).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                if (null!=e)
-                LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
-                return false;
-            }
+    void initAfterViews() {
+        LogUtils.logError("url=" + url);
+        Glide.with(LoadBigImageActivity.this)
+                .load(url)
+                .error(R.drawable.load_failed)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        LogUtils.logError("onException");
+                        if (null != e)
+                            LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
+                        return false;
+                    }
 
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                return false;
-            }
-        }).into(iv);
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        LogUtils.logError("onResourceReady");
+                        iv.setImageDrawable(resource);
+                        return false;
+                    }
+
+
+                }).into(iv);
     }
 }
