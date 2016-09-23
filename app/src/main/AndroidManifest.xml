@@ -46,7 +46,7 @@
         <activity
             android:name=".mode.activity.LoadBigImageActivity_"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/TranslucentNavigationTheme"
             android:windowSoftInputMode="adjustNothing"
             />
         <activity
@@ -65,7 +65,7 @@
         <activity
             android:name="com.example.well.luochen.mode.activity.MVImageActivity_"
             android:screenOrientation="portrait"
-            android:theme="@style/TestTheme"
+            android:theme="@style/TranslucentNavigationTheme"
             android:windowSoftInputMode="adjustNothing"/>
 
         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"  全屏-->

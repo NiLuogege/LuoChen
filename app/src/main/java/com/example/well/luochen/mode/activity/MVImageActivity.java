@@ -89,7 +89,7 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
                         {
                             mNewslist = showapi_res_body.newslist;
 //                            MVImageInfo mvImageInfo = mNewslist.get(1);
-//                            GlideUtils.displayImageView(MVImageActivity.this,mvImageInfo.picUrl,iv_bg,R.drawable.he);
+//                            GlideUtils.displayImageView(MVImageActivity.this,mvImageInfo.picUrl,iv_bg,R.drawable.load_failed);
 
                             if (null == mAdapter) {
                                 mAdapter = new MVImageAdapter();
@@ -254,15 +254,15 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
                 MVImageAdapter.ViewHolder myHolder = (MVImageAdapter.ViewHolder) holder;
                 MVImageInfo mvImageInfo = mNewslist.get(position);
                 final String url = mvImageInfo.picUrl;
-                GlideUtils.displayImageView(MVImageActivity.this, url, myHolder.mIv_item, R.drawable.he);
+                GlideUtils.displayImageView(MVImageActivity.this, url, myHolder.mIv_item, R.drawable.load_failed);
 
                 myHolder.mIv_item.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         iv_fg.setVisibility(View.VISIBLE);
-                        GlideUtils.displayImageView(MVImageActivity.this, url, iv_fg, R.drawable.he);
+                        GlideUtils.displayImageView(MVImageActivity.this, url, iv_fg, R.drawable.load_failed);
                         ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1, mRawX, mRawY);
-                        scaleAnimation.setDuration(500);
+                        scaleAnimation.setDuration(300);
                         scaleAnimation.setFillAfter(false);
                         iv_fg.startAnimation(scaleAnimation);
                     }

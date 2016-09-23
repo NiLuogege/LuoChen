@@ -4,22 +4,23 @@
     android:id="@+id/activity_load_big_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_HotPink"
+    android:background="@color/black"
     >
 
     <com.example.well.luochen.view.PinchImageView
         android:id="@+id/iv"
-        android:paddingTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:src="@drawable/he"/>
+        android:fitsSystemWindows="true"
+        android:paddingTop="8dp"
+        android:src="@drawable/load_failed"/>
 
     <!--<uk.co.senab.photoview.PhotoView-->
-        <!--android:id="@+id/iv"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:src="@drawable/he"/>-->
+    <!--android:id="@+id/iv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:src="@drawable/load_failed"/>-->
 
 </RelativeLayout>

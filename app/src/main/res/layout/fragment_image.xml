@@ -18,28 +18,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/he"/>
+                />
 
             <ImageView
                 android:id="@+id/iv_me"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/he"/>
+                />
 
             <ImageView
                 android:id="@+id/iv_chao"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/he"/>
+                />
 
             <ImageView
                 android:id="@+id/iv_dian"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/he"/>
+                />
 
         </LinearLayout>
 

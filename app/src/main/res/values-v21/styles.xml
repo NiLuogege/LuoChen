@@ -8,7 +8,7 @@
     </style>
 
     <!--使用这个可以让Activity布局内容显示到 状态栏中-->
-    <style name="TestTheme" parent="android:Theme.Material.NoActionBar">
+    <style name="TranslucentNavigationTheme" parent="android:Theme.Material.NoActionBar">
 
         <!--下列两行控制使得应用窗口透明，用于展示一些差异-->
         <item name="android:windowBackground">@color/transparency</item>

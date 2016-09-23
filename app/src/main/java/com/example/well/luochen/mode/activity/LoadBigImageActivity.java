@@ -28,9 +28,7 @@ public class LoadBigImageActivity extends BaseActivity {
     @AfterViews
     void initAfterViews()
     {
-        app.setSystemBar(this,R.color.color_HotPink);
-
-        Glide.with(LoadBigImageActivity.this).load(url).error(R.drawable.he).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
+        Glide.with(LoadBigImageActivity.this).load(url).error(R.drawable.load_failed).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                 if (null!=e)
