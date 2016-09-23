@@ -16,5 +16,6 @@
     <color name="color_HotPink">#FF69B4</color>
     <color name="transparency">#00ffffff</color>
     <color name="color_lightCyan">#E1FFFF</color>
+    <color name="color_bg_mv">#E9DF97</color>
 
 </resources>

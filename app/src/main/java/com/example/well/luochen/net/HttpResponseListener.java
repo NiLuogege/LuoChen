@@ -43,15 +43,15 @@ import com.yolanda.nohttp.rest.Response;
  */
 public class HttpResponseListener<T> implements OnResponseListener<T> {
 
-	private Dialog dialog;
-	
+    private Dialog dialog;
+
     @SuppressWarnings("unused")
-	private Request<?> mRequest;
+    private Request<?> mRequest;
 
     private Context ctx;
-    
-	private boolean isShowDialog;
-	
+
+    private boolean isShowDialog;
+
     /**
      * 结果回调.
      */
@@ -63,7 +63,7 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
      * @param request      请求对象.
      * @param httpCallback 回调对象.
      */
-    public HttpResponseListener(Context context, Request<?> request, HttpListener<T> httpCallback,Context ctx,boolean isShowDialog) {
+    public HttpResponseListener(Context context, Request<?> request, HttpListener<T> httpCallback, Context ctx, boolean isShowDialog) {
         this.mRequest = request;
         this.callback = httpCallback;
         this.ctx = context;
@@ -75,8 +75,8 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
      */
     @Override
     public void onStart(int what) {
-    	if(!isShowDialog) return;
-    	showLoadingDialog();
+        if (!isShowDialog) return;
+        showLoadingDialog();
     }
 
     /**
@@ -84,8 +84,9 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
      */
     @Override
     public void onFinish(int what) {
-    	if(!isShowDialog) return;
-    	cancelDialog();
+        if (isShowDialog) {
+            cancelDialog();
+        }
         callback.onFinish();
     }
 
@@ -94,8 +95,8 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
      */
     @Override
     public void onSucceed(int what, Response<T> response) {
-        if (callback != null){
-        	callback.onSucceed(what, response);
+        if (callback != null) {
+            callback.onSucceed(what, response);
 //            if(response.isSucceed()){
 //            	if(response.get() != null){
 //            		BaseResponse baseResponse = (BaseResponse) response.get();
@@ -110,8 +111,7 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
 //            	}
 //            }
         }
-            
-        
+
 
     }
 
@@ -121,17 +121,17 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
     @Override
     public void onFailed(int what, String url, Object tag, Exception exception, int responseCode, long networkMillis) {
 //        if (exception instanceof ClientError) {// 客户端错误
-            if (responseCode == 400) {//服务器未能理解请求。
-                showToast("错误的请求，服务器表示不能理解。");
-            } else if (responseCode == 403) {// 请求的页面被禁止
-                showToast("错误的请求，服务器表示不愿意。");
-            } else if (responseCode == 404) {// 服务器无法找到请求的页面
-                showToast("错误的请求，服务器表示找不到。");
-            } else {// 400-417都是客户端错误，开发者可以自己去查询噢
-                showToast("错误的请求，服务器表示伤不起。");
-            }
+        if (responseCode == 400) {//服务器未能理解请求。
+            showToast("错误的请求，服务器表示不能理解。");
+        } else if (responseCode == 403) {// 请求的页面被禁止
+            showToast("错误的请求，服务器表示不愿意。");
+        } else if (responseCode == 404) {// 服务器无法找到请求的页面
+            showToast("错误的请求，服务器表示找不到。");
+        } else {// 400-417都是客户端错误，开发者可以自己去查询噢
+            showToast("错误的请求，服务器表示伤不起。");
+        }
 //        } else
-            if (exception instanceof ServerError) {// 服务器错误
+        if (exception instanceof ServerError) {// 服务器错误
             if (500 == responseCode) {
                 showToast("服务器遇到不可预知的情况。");
             } else if (501 == responseCode) {
@@ -161,40 +161,40 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
         } else {
             showToast("未知错误。");
         }
-        if (null !=exception.getMessage())
-    	LogUtils.logError(exception.getMessage());
+        if (null != exception.getMessage())
+            LogUtils.logError(exception.getMessage());
 
         if (callback != null)
             callback.onFailed(what, url, tag, exception, responseCode, networkMillis);
     }
-    
-	private void showLoadingDialog(){
-		dialog = new Dialog(ctx, R.style.custom_dialog);
-		dialog.setCancelable(false);
-		dialog.setCanceledOnTouchOutside(false);
-		dialog.setOnKeyListener(new OnKeyListener() {
-			
-			@Override
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				return true;
-			}
-		});
-		
-		WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-		lp.width = MyApplication.getInstance().widthPixels;
-		lp.height = MyApplication.getInstance().heightPixels;
-		
-		dialog.setContentView(R.layout.dialog_loading_layout);
-		
-		dialog.show();
-	}
-	
-	private void cancelDialog(){
-		if(dialog != null) dialog.dismiss();
-	}
-	
-	private void showToast(String str){
-		Toast.makeText(ctx, str, Toast.LENGTH_SHORT).show();
-	}
+
+    private void showLoadingDialog() {
+        dialog = new Dialog(ctx, R.style.custom_dialog);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setOnKeyListener(new OnKeyListener() {
+
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                return true;
+            }
+        });
+
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.width = MyApplication.getInstance().widthPixels;
+        lp.height = MyApplication.getInstance().heightPixels;
+
+        dialog.setContentView(R.layout.dialog_loading_layout);
+
+        dialog.show();
+    }
+
+    private void cancelDialog() {
+        if (dialog != null) dialog.dismiss();
+    }
+
+    private void showToast(String str) {
+        Toast.makeText(ctx, str, Toast.LENGTH_SHORT).show();
+    }
 
 }

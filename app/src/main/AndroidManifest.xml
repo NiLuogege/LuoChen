@@ -65,8 +65,9 @@
         <activity
             android:name="com.example.well.luochen.mode.activity.MVImageActivity_"
             android:windowSoftInputMode="adjustNothing"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait"/>
+
+        <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"  全屏-->
 
 
         <!--shareSDK所需Activity-->
