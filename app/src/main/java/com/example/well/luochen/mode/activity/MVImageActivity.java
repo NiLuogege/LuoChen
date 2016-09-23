@@ -226,7 +226,7 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
         refreshMVData();
     }
 
-    public class MVImageAdapter extends RecyclerView.Adapter<MVImageAdapter.ViewHolder> {
+    public class MVImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         @Override
@@ -236,28 +236,28 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
             } else {
                 return 0;
             }
-//            return super.getItemViewType(position);
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = null;
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == 0) {
-                view = View.inflate(MVImageActivity.this, R.layout.item_activity_image_mv, null);
+                View view = View.inflate(MVImageActivity.this, R.layout.item_activity_image_mv, null);
+                return new ViewHolder(view);
             } else {
-                view = View.inflate(MVImageActivity.this, R.layout.footview_recycle, null);
+                View footerView = View.inflate(MVImageActivity.this, R.layout.footview_recycle, null);
+                return new FooterViewHolder(footerView);
             }
-            return new ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (position != mNewslist.size() - 1 + 1) {
+                MVImageAdapter.ViewHolder myHolder = (MVImageAdapter.ViewHolder) holder;
                 MVImageInfo mvImageInfo = mNewslist.get(position);
                 final String url = mvImageInfo.picUrl;
-                GlideUtils.displayImageView(MVImageActivity.this, url, holder.mIv_item, R.drawable.he);
+                GlideUtils.displayImageView(MVImageActivity.this, url, myHolder.mIv_item, R.drawable.he);
 
-                holder.mIv_item.setOnClickListener(new View.OnClickListener() {
+                myHolder.mIv_item.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         iv_fg.setVisibility(View.VISIBLE);
@@ -287,6 +287,12 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
             public ViewHolder(View itemView) {
                 super(itemView);
                 mIv_item = (ImageView) itemView.findViewById(R.id.iv_item);
+            }
+        }
+
+        class FooterViewHolder extends RecyclerView.ViewHolder {
+            public FooterViewHolder(View itemView) {
+                super(itemView);
             }
         }
     }
