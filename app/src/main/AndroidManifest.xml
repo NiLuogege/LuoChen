@@ -64,8 +64,9 @@
         <!--美女图片-->
         <activity
             android:name="com.example.well.luochen.mode.activity.MVImageActivity_"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/TestTheme"
+            android:windowSoftInputMode="adjustNothing"/>
 
         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"  全屏-->
 

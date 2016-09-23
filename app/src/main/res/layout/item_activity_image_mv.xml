@@ -8,6 +8,6 @@
         android:id="@+id/iv_item"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

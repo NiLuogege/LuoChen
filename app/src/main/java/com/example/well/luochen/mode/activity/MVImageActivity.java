@@ -62,7 +62,6 @@ public class MVImageActivity extends BaseActivity implements SwipeRefreshLayout.
     }
 
     private void initOwnView() {
-        app.setSystemBar(this, R.color.color_bg_mv);
         list_rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         list_rv.addItemDecoration(new SpacesItemDecoration(10));
         iv_bg.setImageResource(R.mipmap.bg);
