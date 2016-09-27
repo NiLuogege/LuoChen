@@ -1,18 +1,27 @@
 package com.example.well.luochen.mode.activity;
 
+import android.graphics.Point;
+import android.net.Uri;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.well.luochen.R;
+import com.example.well.luochen.utils.ImageHelper;
 import com.example.well.luochen.utils.LogUtils;
+import com.example.well.luochen.utils.MD5;
 import com.example.well.luochen.view.PinchImageView;
+import com.example.well.luochen.view.hugeImageView.HugeImageRegionLoader;
+import com.example.well.luochen.view.hugeImageView.TileDrawable;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
+
+import java.io.File;
 
 /**
  * Created by Well on 2016/7/9.
@@ -24,10 +33,44 @@ public class LoadBigImageActivity extends BaseActivity {
 
     @ViewById
     PinchImageView iv;
+    private TileDrawable mTileDrawable;
+    private String mMd5String;
 
     @AfterViews
     void initAfterViews() {
         LogUtils.logError("url=" + url);
+        mMd5String = MD5.encodeMD5String(url);
+        File file = new File(ImageHelper.ALBUM_PATH + mMd5String);
+        if (file.exists()) {
+            loadImage2Local();
+            LogUtils.logError("本地有");
+        } else {
+            loadImage2Net();
+            LogUtils.logError("本地没有");
+        }
+
+
+    }
+
+    private void loadImage2Local() {
+        iv.post(new Runnable() {
+            @Override
+            public void run() {
+                mTileDrawable = new TileDrawable();
+                mTileDrawable.setInitCallback(new TileDrawable.InitCallback() {
+                    @Override
+                    public void onInit() {
+                        iv.setImageDrawable(mTileDrawable);
+                    }
+                });
+                Uri uri = Uri.fromFile(new File(ImageHelper.ALBUM_PATH + mMd5String));
+                LogUtils.logError("长片路径" + uri.getAuthority());
+                mTileDrawable.init(new HugeImageRegionLoader(LoadBigImageActivity.this, uri), new Point(iv.getWidth(), iv.getHeight()));
+            }
+        });
+    }
+
+    private void loadImage2Net() {
         Glide.with(LoadBigImageActivity.this)
                 .load(url)
                 .error(R.drawable.load_failed)

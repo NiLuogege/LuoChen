@@ -17,7 +17,7 @@ import java.net.URL;
  */
 
 public class ImageHelper {
-    public final static String ALBUM_PATH = Environment.getExternalStorageDirectory() + "/download_test/";
+    public final static String ALBUM_PATH = Environment.getExternalStorageDirectory() + "/luoChen/bdj/";
 
     /**
      * Get image from newwork

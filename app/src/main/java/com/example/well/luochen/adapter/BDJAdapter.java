@@ -3,7 +3,6 @@ package com.example.well.luochen.adapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -34,8 +33,6 @@ import com.example.well.luochen.utils.MD5;
 import com.example.well.luochen.utils.Settings;
 import com.example.well.luochen.utils.ToastUtils;
 import com.example.well.luochen.view.PinchImageView;
-import com.example.well.luochen.view.hugeImageView.HugeImageRegionLoader;
-import com.example.well.luochen.view.hugeImageView.TileDrawable;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -51,10 +48,9 @@ import cn.sharesdk.onekeyshare.themeCustom.SharePopupWindow;
 public class BDJAdapter extends BaseAdapter {
     private BDJFragment mBdjFragment;
     private int num = 0;
-    private TileDrawable mTileDrawable;
 
-    String filePath = "http://wimg.spriteapp.cn/x/640x400/ugc/2016/09/21/57e1bf635a4e2.jpg";
-    String mFileName = "test.jpg";
+    String filePath = "";
+    String mFileName = "";
 
     public BDJAdapter(BDJFragment bdjFragment) {
         mBdjFragment = bdjFragment;
@@ -185,7 +181,7 @@ public class BDJAdapter extends BaseAdapter {
                                 layoutParams.height = x * imageHeight / imageWidth;
                                 iv.setLayoutParams(layoutParams);
                                 iv.setImageBitmap(resource);
-                            } else if (imageHeight > y * 2.5) {//长图
+                            } else if (imageHeight > y * 2.0) {//长图
                                 finalMHolder.mRl_huge_image.setVisibility(View.VISIBLE);
                                 lp.width = x;
 //                                lp.height = y / 2;
@@ -201,8 +197,8 @@ public class BDJAdapter extends BaseAdapter {
 
                                 iv.setLayoutParams(layoutParams);
 
-                                filePath=listinfo.image0;
-                                mFileName= MD5.encodeMD5String(filePath);
+                                filePath = listinfo.image0;
+                                mFileName = MD5.encodeMD5String(filePath);
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
@@ -217,10 +213,10 @@ public class BDJAdapter extends BaseAdapter {
                                     }
                                 };
                                 File file = new File(ImageHelper.ALBUM_PATH + mFileName);
-                                if(file.exists()){
+                                if (file.exists()) {
                                     Bitmap mBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                                     setPartOfHuge(mBitmap, x, y, iv);
-                                }else{
+                                } else {
                                     new Thread(runnable).start();
                                 }
 
@@ -323,25 +319,6 @@ public class BDJAdapter extends BaseAdapter {
     private void setPartOfHuge(Bitmap mBitmap, int x, int y, PinchImageView iv) {
         Bitmap bitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), y / 6);
         iv.setImageBitmap(bitmap);
-    }
-
-    private void setHugeImage(final PinchImageView iv) {
-        iv.post(new Runnable() {
-            @Override
-            public void run() {
-                mTileDrawable = new TileDrawable();
-                mTileDrawable.setInitCallback(new TileDrawable.InitCallback() {
-                    @Override
-                    public void onInit() {
-//                                                            LogUtils.logError("onInit");
-                        iv.setImageDrawable(mTileDrawable);
-                    }
-                });
-                Uri uri = Uri.fromFile(new File(ImageHelper.ALBUM_PATH + "test.jpg"));
-                LogUtils.logError("长片路径"+uri.getAuthority());
-                mTileDrawable.init(new HugeImageRegionLoader(mBdjFragment.mActivity, uri), new Point(iv.getWidth(), iv.getHeight()));
-            }
-        });
     }
 
 
