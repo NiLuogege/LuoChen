@@ -44,7 +44,7 @@ public class LoadBigImageActivity extends BaseActivity {
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         LogUtils.logError("onResourceReady");
-                        iv.setImageDrawable(resource);
+//                        iv.setImageResource(R.drawable.load_failed);
                         return false;
                     }
 

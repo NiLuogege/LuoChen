@@ -1,7 +1,9 @@
 package com.example.well.luochen.adapter;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -25,14 +27,20 @@ import com.example.well.luochen.mode.activity.LoadBigImageActivity_;
 import com.example.well.luochen.mode.fragment.BDJFragment;
 import com.example.well.luochen.mode.fragment.BaseFragment;
 import com.example.well.luochen.net.info.BsbdjListinfo;
+import com.example.well.luochen.utils.ImageHelper;
 import com.example.well.luochen.utils.Kit;
 import com.example.well.luochen.utils.LogUtils;
+import com.example.well.luochen.utils.MD5;
 import com.example.well.luochen.utils.Settings;
 import com.example.well.luochen.utils.ToastUtils;
 import com.example.well.luochen.view.PinchImageView;
+import com.example.well.luochen.view.hugeImageView.HugeImageRegionLoader;
+import com.example.well.luochen.view.hugeImageView.TileDrawable;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.io.File;
 
 import cn.sharesdk.onekeyshare.themeCustom.ShareModel;
 import cn.sharesdk.onekeyshare.themeCustom.SharePopupWindow;
@@ -43,6 +51,10 @@ import cn.sharesdk.onekeyshare.themeCustom.SharePopupWindow;
 public class BDJAdapter extends BaseAdapter {
     private BDJFragment mBdjFragment;
     private int num = 0;
+    private TileDrawable mTileDrawable;
+
+    String filePath = "http://wimg.spriteapp.cn/x/640x400/ugc/2016/09/21/57e1bf635a4e2.jpg";
+    String mFileName = "test.jpg";
 
     public BDJAdapter(BDJFragment bdjFragment) {
         mBdjFragment = bdjFragment;
@@ -85,6 +97,7 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mHeartButton = (LikeButton) convertView.findViewById(R.id.heart_button);
             mHolder.mJCVP_S = (JCVideoPlayerStandard) convertView.findViewById(R.id.JCVP_S);
             mHolder.mRl_root = (RelativeLayout) convertView.findViewById(R.id.rl_root);
+            mHolder.mRl_huge_image = (RelativeLayout) convertView.findViewById(R.id.rl_huge_image);
 
 
             convertView.setTag(mHolder);
@@ -126,8 +139,10 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mFl_type.setVisibility(View.VISIBLE);
             mHolder.mIv_image.setVisibility(View.VISIBLE);
             mHolder.mJCVP_S.setVisibility(View.INVISIBLE);
+
             final PinchImageView iv = mHolder.mIv_image;
             final ViewHolder finalMHolder = mHolder;
+            finalMHolder.mRl_huge_image.setVisibility(View.GONE);
             Glide
                     .with(mBdjFragment.mActivity) // could be an issue!
                     .load(listinfo.image0)
@@ -155,8 +170,8 @@ public class BDJAdapter extends BaseAdapter {
                             int imageHeight = resource.getHeight();//图片高度
 
                             Point displayMetrics = Kit.getDisplayScreenMetrics();
-                            int x = displayMetrics.x;//屏幕宽度
-                            int y = displayMetrics.y;//屏幕盖度
+                            final int x = displayMetrics.x;//屏幕宽度
+                            final int y = displayMetrics.y;//屏幕盖度
 
                             ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();//imageView的
                             ViewGroup.LayoutParams lp = finalMHolder.mFl_type.getLayoutParams();//imageView的父控件
@@ -171,15 +186,44 @@ public class BDJAdapter extends BaseAdapter {
                                 iv.setLayoutParams(layoutParams);
                                 iv.setImageBitmap(resource);
                             } else if (imageHeight > y * 2.5) {//长图
+                                finalMHolder.mRl_huge_image.setVisibility(View.VISIBLE);
                                 lp.width = x;
-                                lp.height = y / 2;
+//                                lp.height = y / 2;
+                                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                                 finalMHolder.mFl_type.setLayoutParams(lp);
                                 LogUtils.logError(listinfo.text);
-                                iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                                 layoutParams.width = x;
-                                layoutParams.height = y / 2;
+//                                layoutParams.height = y / 2;
+                                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                                iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                                iv.setAdjustViewBounds(true);  //加上这两个个属性可以是裁剪的图片 占满屏幕宽度显示
+
                                 iv.setLayoutParams(layoutParams);
-                                iv.setImageBitmap(resource);
+
+                                filePath=listinfo.image0;
+                                mFileName= MD5.encodeMD5String(filePath);
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        try {
+                                            Bitmap mBitmap = BitmapFactory.decodeStream(ImageHelper.getImageStream(filePath));
+                                            ImageHelper.saveFile(mBitmap, mFileName);
+                                            setPartOfHuge(mBitmap, x, y, iv);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                };
+                                File file = new File(ImageHelper.ALBUM_PATH + mFileName);
+                                if(file.exists()){
+                                    Bitmap mBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                                    setPartOfHuge(mBitmap, x, y, iv);
+                                }else{
+                                    new Thread(runnable).start();
+                                }
+
 
                             } else {
                                 lp.width = x;
@@ -192,7 +236,7 @@ public class BDJAdapter extends BaseAdapter {
                                 iv.setLayoutParams(layoutParams);
                                 iv.setImageBitmap(resource);
                             }
-                            LogUtils.logError("x=" + x + " y=" + y + " width=" + resource.getWidth() + " height=" + resource.getHeight());
+//                            LogUtils.logError("x=" + x + " y=" + y + " width=" + resource.getWidth() + " height=" + resource.getHeight());
 
                         }
                     });
@@ -202,6 +246,7 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mFl_type.setVisibility(View.VISIBLE);
             mHolder.mIv_image.setVisibility(View.INVISIBLE);
             mHolder.mJCVP_S.setVisibility(View.VISIBLE);
+            mHolder.mRl_huge_image.setVisibility(View.GONE);
 
             ViewGroup.LayoutParams layoutParams = mHolder.mFl_type.getLayoutParams();
             layoutParams.height = (int) Kit.dp2px(200f, mBdjFragment.mActivity.getResources());
@@ -220,6 +265,8 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mFl_type.setVisibility(View.GONE);
             mHolder.mIv_image.setVisibility(View.GONE);
             mHolder.mJCVP_S.setVisibility(View.GONE);
+            mHolder.mRl_huge_image.setVisibility(View.GONE);
+
         }
         /**
          * 点赞
@@ -273,6 +320,30 @@ public class BDJAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private void setPartOfHuge(Bitmap mBitmap, int x, int y, PinchImageView iv) {
+        Bitmap bitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), y / 6);
+        iv.setImageBitmap(bitmap);
+    }
+
+    private void setHugeImage(final PinchImageView iv) {
+        iv.post(new Runnable() {
+            @Override
+            public void run() {
+                mTileDrawable = new TileDrawable();
+                mTileDrawable.setInitCallback(new TileDrawable.InitCallback() {
+                    @Override
+                    public void onInit() {
+//                                                            LogUtils.logError("onInit");
+                        iv.setImageDrawable(mTileDrawable);
+                    }
+                });
+                Uri uri = Uri.fromFile(new File(ImageHelper.ALBUM_PATH + "test.jpg"));
+                LogUtils.logError("长片路径"+uri.getAuthority());
+                mTileDrawable.init(new HugeImageRegionLoader(mBdjFragment.mActivity, uri), new Point(iv.getWidth(), iv.getHeight()));
+            }
+        });
+    }
+
 
     class ViewHolder {
         TextView mTv_love;
@@ -288,6 +359,7 @@ public class BDJAdapter extends BaseAdapter {
         LikeButton mHeartButton;
         JCVideoPlayerStandard mJCVP_S;
         RelativeLayout mRl_root;
+        RelativeLayout mRl_huge_image;
 
     }
 }

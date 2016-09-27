@@ -68,6 +68,7 @@
                 android:id="@+id/item_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/color_bg_af"
                 />
 
             <com.example.well.luochen.jcvideoplayer.JCVideoPlayerStandard
@@ -78,8 +79,30 @@
 
         </FrameLayout>
 
+        <RelativeLayout
+            android:id="@+id/rl_huge_image"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_pic_cut"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_bg_af"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@color/color_bg_af"
+                android:text="点击查看长图"
+                android:textColor="#fff"/>
+
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_btm"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:orientation="horizontal"
@@ -138,6 +161,9 @@
                 android:drawableLeft="@drawable/commend"
                 android:text="200"/>
         </LinearLayout>
+
+
     </LinearLayout>
+
 
 </RelativeLayout>

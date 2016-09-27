@@ -17,5 +17,6 @@
     <color name="transparency">#00ffffff</color>
     <color name="color_lightCyan">#E1FFFF</color>
     <color name="color_bg_mv">#E9DF97</color>
+    <color name="color_bg_af">#af000000</color>
 
 </resources>

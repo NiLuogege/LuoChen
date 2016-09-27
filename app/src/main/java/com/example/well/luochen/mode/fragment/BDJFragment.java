@@ -117,7 +117,7 @@ public class BDJFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
 
     public void getBsbdqj() {
         String url = String.format(URLUtils.URL_BSBDQJ + "?showapi_appid=20775&page=%s&showapi_sign=d159d4a9edd649c9b669386b0170babc", currentPage + 1);
-        LogUtils.logError("url=" + url);
+        LogUtils.logError("getBsbdqj url=" + url);
         mActivity.requestGet(RequestWhat.What_1, url, BsbdjResponse.class, new HttpListener<BsbdjResponse>() {
 
             @Override
