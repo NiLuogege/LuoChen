@@ -85,7 +85,7 @@ public class ImageHelper {
     public static void saveFile(Bitmap bm, String fileName) throws IOException {
         File dirFile = new File(ALBUM_PATH);
         if (!dirFile.exists()) {
-            dirFile.mkdir();
+            dirFile.mkdirs();
         }
         File myCaptureFile = new File(ALBUM_PATH + fileName);
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));

@@ -3,6 +3,7 @@ package com.example.well.luochen.adapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -26,18 +27,22 @@ import com.example.well.luochen.mode.activity.LoadBigImageActivity_;
 import com.example.well.luochen.mode.fragment.BDJFragment;
 import com.example.well.luochen.mode.fragment.BaseFragment;
 import com.example.well.luochen.net.info.BsbdjListinfo;
+import com.example.well.luochen.utils.FileHelper;
 import com.example.well.luochen.utils.ImageHelper;
 import com.example.well.luochen.utils.Kit;
 import com.example.well.luochen.utils.LogUtils;
 import com.example.well.luochen.utils.MD5;
 import com.example.well.luochen.utils.Settings;
 import com.example.well.luochen.utils.ToastUtils;
+import com.example.well.luochen.utils.download.FileDownloadThread;
 import com.example.well.luochen.view.PinchImageView;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import cn.sharesdk.onekeyshare.themeCustom.ShareModel;
 import cn.sharesdk.onekeyshare.themeCustom.SharePopupWindow;
@@ -126,6 +131,9 @@ public class BDJAdapter extends BaseAdapter {
         boolean wifi = BaseFragment.isWifi();
         boolean isSaveFlow = mBdjFragment.mACache.getAsBoolean(Settings.IsSaveFlow);
 
+        final PinchImageView iv = mHolder.mIv_image;
+        final ViewHolder finalMHolder = mHolder;
+
         if (wifi && isSaveFlow) {
             ToastUtils.show(mBdjFragment.mActivity, "现在已经是省流量模式啦");
         }
@@ -136,8 +144,7 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mIv_image.setVisibility(View.VISIBLE);
             mHolder.mJCVP_S.setVisibility(View.INVISIBLE);
 
-            final PinchImageView iv = mHolder.mIv_image;
-            final ViewHolder finalMHolder = mHolder;
+
             finalMHolder.mRl_huge_image.setVisibility(View.GONE);
             Glide
                     .with(mBdjFragment.mActivity) // could be an issue!
@@ -204,9 +211,16 @@ public class BDJAdapter extends BaseAdapter {
                                     public void run() {
 
                                         try {
-                                            Bitmap mBitmap = BitmapFactory.decodeStream(ImageHelper.getImageStream(filePath));
+                                            final Bitmap mBitmap = BitmapFactory.decodeStream(ImageHelper.getImageStream(filePath));
                                             ImageHelper.saveFile(mBitmap, mFileName);
-                                            setPartOfHuge(mBitmap, x, y, iv);
+
+                                            mBdjFragment.mActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    setPartOfHuge(mBitmap, x, y, iv);
+                                                }
+                                            });
+
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -253,8 +267,25 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mJCVP_S.setPosition(position);
             mHolder.mJCVP_S.titleTextView.setVisibility(View.GONE);
             mHolder.mJCVP_S.thumbImageView.setImageResource(R.drawable.shape_background_gray);
-//            GlideUtils.displayImageView(mBdjFragment.mActivity,listinfo.profile_image,mHolder.mJCVP_S.thumbImageView,R.drawable.icon_moren);
-//            ImageLoader.getInstance().displayImage(listinfo.profile_image, mHolder.mJCVP_S.thumbImageView);
+
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        URL url = new URL(listinfo.video_uri);
+//                        URLConnection urlConnection = url.openConnection();
+//                        int contentLength = urlConnection.getContentLength();
+//                        LogUtils.logError("视频长度="+contentLength);
+//                    } catch (MalformedURLException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }).start();
+
+
+            setVideoImage(listinfo, finalMHolder);//显示第一帧
 
         } else if (TextUtils.equals(listinfo.type, "29"))//纯文字
         {
@@ -314,6 +345,50 @@ public class BDJAdapter extends BaseAdapter {
 
 
         return convertView;
+    }
+
+    private void setVideoImage(BsbdjListinfo listinfo, final ViewHolder finalMHolder) {
+        File dir = new File(FileHelper.VIDEO_PATH);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        String md5String = MD5.encodeMD5String(listinfo.video_uri);
+        final File file = new File(dir, md5String);
+
+        if(file.exists()){
+            setFirstFrame(file, finalMHolder);
+            LogUtils.logError("已经存在");
+        }else
+        {
+            LogUtils.logError("没有存在");
+            try {
+                URL url = new URL(listinfo.video_uri);
+                FileDownloadThread fileDownloadThread = new FileDownloadThread(url, file, 0, 1024*256, 0);
+                fileDownloadThread.setOnDownloadCompletedListener(new FileDownloadThread.OnDownloadCompletedListener() {
+                    @Override
+                    public void onCompleted() {
+                        mBdjFragment.mActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setFirstFrame(file, finalMHolder);
+                            }
+                        });
+
+                    }
+                });
+                fileDownloadThread.start();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void setFirstFrame(File file, ViewHolder finalMHolder) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(file.getAbsolutePath());
+        Bitmap frameAtTime = mmr.getFrameAtTime(100);
+//        Bitmap frameAtTime = mmr.getFrameAtTime();
+        finalMHolder.mJCVP_S.thumbImageView.setImageBitmap(frameAtTime);
     }
 
     private void setPartOfHuge(Bitmap mBitmap, int x, int y, PinchImageView iv) {
