@@ -10,7 +10,6 @@
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/lv_music_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@android:color/white"
@@ -20,7 +19,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/ll_music_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_1"
@@ -46,7 +44,6 @@
             android:src="@drawable/video_pause_big"/>
 
         <SeekBar
-            android:id="@+id/sb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

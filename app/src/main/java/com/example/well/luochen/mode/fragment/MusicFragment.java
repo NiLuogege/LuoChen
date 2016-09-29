@@ -55,8 +55,8 @@ public class MusicFragment extends BaseFragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position!=0)
-        MusicDetailActivity_.intent(mMainActivity).position(position).start();
+        if (position != 0)
+            MusicDetailActivity_.intent(mMainActivity).position(position).start();
     }
 
     private void initData() {
@@ -118,13 +118,20 @@ public class MusicFragment extends BaseFragment implements AdapterView.OnItemCli
         mMainActivity.requestGet(RequestWhat.What_2, url, BsMusicResponse.class, new HttpListener<BsMusicResponse>() {
             @Override
             public void onSucceed(int what, Response<BsMusicResponse> response) {
-//                LogUtils.logError("歌曲" + response.get().showapi_res_body.pagebean.songlist.toString());
 
-                pzlv.setAdapter(new MusicAdaptr(MusicFragment.this));
+                if (null != response) {
+                    //                LogUtils.logError("歌曲" + response.get().showapi_res_body.pagebean.songlist.toString());
 
-                ArrayList<MusicListInfo> songlist = response.get().showapi_res_body.pagebean.songlist;
+                    pzlv.setAdapter(new MusicAdaptr(MusicFragment.this));
 
-                GlideImageUtils.loadImageToImageView(mMainActivity, songlist.get(8).albumpic_big, pzlv.getHeaderImageView());
+                    ArrayList<MusicListInfo> songlist = response.get().showapi_res_body.pagebean.songlist;
+
+                    if (null != songlist) {
+                        GlideImageUtils.loadImageToImageView(mMainActivity, songlist.get(8).albumpic_big, pzlv.getHeaderImageView());
+                    }
+
+
+                }
 
 
             }

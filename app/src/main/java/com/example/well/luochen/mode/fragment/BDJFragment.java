@@ -94,6 +94,20 @@ public class BDJFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
     private void initListener() {
         srl.setOnRefreshListener(this);
         srl.setColorSchemeColors(ContextCompat.getColor(mActivity, R.color.colorAccent));
+//        lv_main.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                if(scrollState==SCROLL_STATE_IDLE){
+//                    int lastVisiblePosition = lv_main.getLastVisiblePosition();
+//                    Log.e("heh","lastVisiblePosition="+lastVisiblePosition);
+//                }
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//
+//            }
+//        });
     }
 
     private void initData() {
@@ -111,6 +125,7 @@ public class BDJFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
 
     @Click
     void rl_title() {
+        LogUtils.logError("rl_title");
         lv_main.setSelection(0);
     }
 

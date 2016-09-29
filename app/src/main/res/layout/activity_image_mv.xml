@@ -6,7 +6,6 @@
 
 
     <ImageView
-        android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
@@ -17,12 +16,10 @@
         android:orientation="vertical">
 
         <com.example.well.luochen.view.AutoSwipeRefreshLayout
-            android:id="@+id/asrl"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </android.support.v7.widget.RecyclerView>
@@ -31,7 +28,6 @@
     </LinearLayout>
 
     <com.example.well.luochen.view.PinchImageView
-        android:id="@+id/iv_fg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#af000000"

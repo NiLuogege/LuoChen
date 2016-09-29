@@ -137,119 +137,22 @@ public class BDJAdapter extends BaseAdapter {
         if (wifi && isSaveFlow) {
             ToastUtils.show(mBdjFragment.mActivity, "现在已经是省流量模式啦");
         }
-
+        iv.setImageResource(R.drawable.load_failed);
         if (TextUtils.equals(mBdjFragment.data.get(position).type, "10"))//GIF 图片,和一般图片
         {
             mHolder.mFl_type.setVisibility(View.VISIBLE);
             mHolder.mIv_image.setVisibility(View.VISIBLE);
             mHolder.mJCVP_S.setVisibility(View.INVISIBLE);
-
-
             finalMHolder.mRl_huge_image.setVisibility(View.GONE);
-            Glide
-                    .with(mBdjFragment.mActivity) // could be an issue!
-                    .load(listinfo.image0)
-                    .asBitmap()
-                    .error(R.drawable.icon_moren)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .listener(new RequestListener<String, Bitmap>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
-                            if (null != e && null != e.toString())
-                                LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
 
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            int imageWidth = resource.getWidth();//图片宽度
-                            int imageHeight = resource.getHeight();//图片高度
-
-                            Point displayMetrics = Kit.getDisplayScreenMetrics();
-                            final int x = displayMetrics.x;//屏幕宽度
-                            final int y = displayMetrics.y;//屏幕盖度
-
-                            ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();//imageView的
-                            ViewGroup.LayoutParams lp = finalMHolder.mFl_type.getLayoutParams();//imageView的父控件
-                            if (imageWidth <= x && imageHeight <= y) {//一般图片
-                                lp.width = x;
-                                lp.height = x * imageHeight / imageWidth;
-                                finalMHolder.mFl_type.setLayoutParams(lp);
-
-                                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                                layoutParams.width = x;
-                                layoutParams.height = x * imageHeight / imageWidth;
-                                iv.setLayoutParams(layoutParams);
-                                iv.setImageBitmap(resource);
-                            } else if (imageHeight > y * 2.0) {//长图
-                                finalMHolder.mRl_huge_image.setVisibility(View.VISIBLE);
-                                lp.width = x;
-//                                lp.height = y / 2;
-                                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                                finalMHolder.mFl_type.setLayoutParams(lp);
-                                LogUtils.logError(listinfo.text);
-                                layoutParams.width = x;
-//                                layoutParams.height = y / 2;
-                                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-
-                                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                                iv.setAdjustViewBounds(true);  //加上这两个个属性可以是裁剪的图片 占满屏幕宽度显示
-
-                                iv.setLayoutParams(layoutParams);
-
-                                filePath = listinfo.image0;
-                                mFileName = MD5.encodeMD5String(filePath);
-                                Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        try {
-                                            final Bitmap mBitmap = BitmapFactory.decodeStream(ImageHelper.getImageStream(filePath));
-                                            ImageHelper.saveFile(mBitmap, mFileName);
-
-                                            mBdjFragment.mActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    setPartOfHuge(mBitmap, x, y, iv);
-                                                }
-                                            });
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                };
-                                File file = new File(ImageHelper.ALBUM_PATH + mFileName);
-                                if (file.exists()) {
-                                    Bitmap mBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                                    setPartOfHuge(mBitmap, x, y, iv);
-                                } else {
-                                    new Thread(runnable).start();
-                                }
+            if(listinfo.image0.endsWith(".gif")){//GIF 图片
+                displayMoveImage(listinfo, iv, finalMHolder);
+            }else{
+                displayImage(listinfo, iv, finalMHolder);
+                LogUtils.logError("是静态图"+listinfo.image0);
+            }
 
 
-                            } else {
-                                lp.width = x;
-                                lp.height = x * imageHeight / imageWidth;
-                                finalMHolder.mFl_type.setLayoutParams(lp);
-
-                                iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                                layoutParams.width = x;
-                                layoutParams.height = x * imageHeight / imageWidth;
-                                iv.setLayoutParams(layoutParams);
-                                iv.setImageBitmap(resource);
-                            }
-//                            LogUtils.logError("x=" + x + " y=" + y + " width=" + resource.getWidth() + " height=" + resource.getHeight());
-
-                        }
-                    });
 
         } else if (TextUtils.equals(listinfo.type, "41"))//视频
         {
@@ -294,6 +197,11 @@ public class BDJAdapter extends BaseAdapter {
             mHolder.mJCVP_S.setVisibility(View.GONE);
             mHolder.mRl_huge_image.setVisibility(View.GONE);
 
+        } else {//其他
+            mHolder.mFl_type.setVisibility(View.GONE);
+            mHolder.mIv_image.setVisibility(View.GONE);
+            mHolder.mJCVP_S.setVisibility(View.GONE);
+            mHolder.mRl_huge_image.setVisibility(View.GONE);
         }
         /**
          * 点赞
@@ -347,23 +255,153 @@ public class BDJAdapter extends BaseAdapter {
         return convertView;
     }
 
+    private void displayMoveImage(BsbdjListinfo listinfo, PinchImageView iv, ViewHolder finalMHolder) {
+        ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();//imageView的
+        ViewGroup.LayoutParams lp = finalMHolder.mFl_type.getLayoutParams();//imageView的父控件
+
+        layoutParams.height=(int) Kit.dp2px(200,mBdjFragment.mActivity.getResources());
+        layoutParams.width=ViewGroup.LayoutParams.MATCH_PARENT;
+
+        lp.height=(int) Kit.dp2px(200,mBdjFragment.mActivity.getResources());
+        lp.width=ViewGroup.LayoutParams.MATCH_PARENT;
+
+        iv.setScaleType(ImageView.ScaleType.FIT_XY);
+        iv.setAdjustViewBounds(true);
+
+        Point displayMetrics = Kit.getDisplayScreenMetrics();
+        int x = displayMetrics.x;//屏幕宽度
+        Glide
+                .with(mBdjFragment.mActivity) // could be an issue!
+                .load(listinfo.image0)
+                .asGif()
+                .into(iv);
+
+        LogUtils.logError("是动图"+listinfo.image0);
+    }
+
+    private void displayImage(final BsbdjListinfo listinfo, final PinchImageView iv, final ViewHolder finalMHolder) {
+        Glide
+                .with(mBdjFragment.mActivity) // could be an issue!
+                .load(listinfo.image0)
+                .asBitmap()
+                .error(R.drawable.icon_moren)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                        if (null != e && null != e.toString())
+                            LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
+
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        int imageWidth = resource.getWidth();//图片宽度
+                        int imageHeight = resource.getHeight();//图片高度
+
+                        Point displayMetrics = Kit.getDisplayScreenMetrics();
+                        final int x = displayMetrics.x;//屏幕宽度
+                        final int y = displayMetrics.y;//屏幕盖度
+
+                        ViewGroup.LayoutParams layoutParams = iv.getLayoutParams();//imageView的
+                        ViewGroup.LayoutParams lp = finalMHolder.mFl_type.getLayoutParams();//imageView的父控件
+                        if (imageWidth <= x && imageHeight <= y) {//一般图片
+                            lp.width = x;
+                            lp.height = x * imageHeight / imageWidth;
+                            finalMHolder.mFl_type.setLayoutParams(lp);
+
+                            iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                            layoutParams.width = x;
+                            layoutParams.height = x * imageHeight / imageWidth;
+                            iv.setLayoutParams(layoutParams);
+                            iv.setImageBitmap(resource);
+                        } else if (imageHeight > y * 2.0) {//长图
+                            finalMHolder.mRl_huge_image.setVisibility(View.VISIBLE);
+                            lp.width = x;
+//                                lp.height = y / 2;
+                            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                            finalMHolder.mFl_type.setLayoutParams(lp);
+                            LogUtils.logError(listinfo.text);
+                            layoutParams.width = x;
+//                                layoutParams.height = y / 2;
+                            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                            iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                            iv.setAdjustViewBounds(true);  //加上这两个个属性可以是裁剪的图片 占满屏幕宽度显示
+
+                            iv.setLayoutParams(layoutParams);
+
+                            filePath = listinfo.image0;
+                            mFileName = MD5.encodeMD5String(filePath);
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    try {
+                                        final Bitmap mBitmap = BitmapFactory.decodeStream(ImageHelper.getImageStream(filePath));
+                                        ImageHelper.saveFile(mBitmap, mFileName);
+
+                                        mBdjFragment.mActivity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                setPartOfHuge(mBitmap, x, y, iv);
+                                            }
+                                        });
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            };
+                            File file = new File(ImageHelper.ALBUM_PATH + mFileName);
+                            if (file.exists()) {
+                                Bitmap mBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                                setPartOfHuge(mBitmap, x, y, iv);
+                            } else {
+                                new Thread(runnable).start();
+                            }
+
+
+                        } else {
+                            lp.width = x;
+                            lp.height = x * imageHeight / imageWidth;
+                            finalMHolder.mFl_type.setLayoutParams(lp);
+
+                            iv.setScaleType(ImageView.ScaleType.FIT_XY);
+                            layoutParams.width = x;
+                            layoutParams.height = x * imageHeight / imageWidth;
+                            iv.setLayoutParams(layoutParams);
+                            iv.setImageBitmap(resource);
+                        }
+//                            LogUtils.logError("x=" + x + " y=" + y + " width=" + resource.getWidth() + " height=" + resource.getHeight());
+
+                    }
+                });
+    }
+
     private void setVideoImage(BsbdjListinfo listinfo, final ViewHolder finalMHolder) {
         File dir = new File(FileHelper.VIDEO_PATH);
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
         String md5String = MD5.encodeMD5String(listinfo.video_uri);
         final File file = new File(dir, md5String);
 
-        if(file.exists()){
+        if (file.exists()) {
             setFirstFrame(file, finalMHolder);
             LogUtils.logError("已经存在");
-        }else
-        {
+        } else {
             LogUtils.logError("没有存在");
             try {
                 URL url = new URL(listinfo.video_uri);
-                FileDownloadThread fileDownloadThread = new FileDownloadThread(url, file, 0, 1024*256, 0);
+                FileDownloadThread fileDownloadThread = new FileDownloadThread(url, file, 0, 1024 * 256, 0);
                 fileDownloadThread.setOnDownloadCompletedListener(new FileDownloadThread.OnDownloadCompletedListener() {
                     @Override
                     public void onCompleted() {
@@ -392,8 +430,11 @@ public class BDJAdapter extends BaseAdapter {
     }
 
     private void setPartOfHuge(Bitmap mBitmap, int x, int y, PinchImageView iv) {
-        Bitmap bitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), y / 6);
-        iv.setImageBitmap(bitmap);
+        if (null != mBitmap) {
+            Bitmap bitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), y / 6);
+            iv.setImageBitmap(bitmap);
+        }
+
     }
 
 
