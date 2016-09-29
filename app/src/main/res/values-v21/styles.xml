@@ -27,7 +27,8 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@mipmap/splash</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+        <!--加上上面注释掉的这条的话华为手机下面的虚拟按键也会变得透明-->
     </style>
 
 </resources>
