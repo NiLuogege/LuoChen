@@ -33,6 +33,7 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
     private MainActivity mActivity;
 
     private int DismissNtb = 0;
+    private BDJFragment_ mBdjFragment;
 
 
     @AfterViews
@@ -49,6 +50,11 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
     @Click
     void backimg() {
         mActivity.showLeft();
+    }
+
+    @Click
+    void rl_title(){
+        mBdjFragment.onTitleClicked();
     }
 
     private void initTabBar() {
@@ -96,14 +102,14 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
         ArrayList<Fragment> list = new ArrayList<>();
         com.example.well.luochen.mode.fragment.ImageFragment ImageFragment = ImageFragment_.builder().build();
         MusicFragment_ musicFragment_ = new MusicFragment_();
-        BDJFragment_ bdjFragment = new BDJFragment_();
+        mBdjFragment = new BDJFragment_();
         DemoFragment_ demoFragment1 = new DemoFragment_();
         DemoFragment_ demoFragment2 = new DemoFragment_();
         DemoFragment_ demoFragment3 = new DemoFragment_();
 
         list.add(ImageFragment);
         list.add(musicFragment_);
-        list.add(bdjFragment);
+        list.add(mBdjFragment);
         list.add(demoFragment1);
         list.add(demoFragment2);
         list.add(demoFragment3);

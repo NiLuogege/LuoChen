@@ -25,7 +25,6 @@ import com.mob.tools.utils.UIHandler;
 import com.yolanda.nohttp.rest.Response;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
@@ -123,11 +122,6 @@ public class BDJFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    @Click
-    void rl_title() {
-        LogUtils.logError("rl_title");
-        lv_main.setSelection(0);
-    }
 
 
     public void getBsbdqj() {
@@ -252,4 +246,7 @@ public class BDJFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
     }
 
 
+    public void onTitleClicked() {
+        lv_main.setSelection(0);
+    }
 }
