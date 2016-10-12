@@ -124,13 +124,19 @@ public class MusicFragment extends BaseFragment implements AdapterView.OnItemCli
 
                     pzlv.setAdapter(new MusicAdaptr(MusicFragment.this));
 
-                    ArrayList<MusicListInfo> songlist = response.get().showapi_res_body.pagebean.songlist;
+                    if (null != response.get().showapi_res_body.pagebean) {
 
-                    if (null != songlist) {
-                        GlideImageUtils.loadImageToImageView(mMainActivity, songlist.get(8).albumpic_big, pzlv.getHeaderImageView());
+
+                        if (null != response.get().showapi_res_body.pagebean.songlist) {
+
+
+                            ArrayList<MusicListInfo> songlist = response.get().showapi_res_body.pagebean.songlist;
+
+                            if (null != songlist) {
+                                GlideImageUtils.loadImageToImageView(mMainActivity, songlist.get(8).albumpic_big, pzlv.getHeaderImageView());
+                            }
+                        }
                     }
-
-
                 }
 
 

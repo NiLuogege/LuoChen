@@ -23,10 +23,10 @@ import com.bumptech.glide.request.target.Target;
 import com.example.well.luochen.R;
 import com.example.well.luochen.jcvideoplayer.JCVideoPlayer;
 import com.example.well.luochen.jcvideoplayer.JCVideoPlayerStandard;
-import com.example.well.luochen.mode.activity.LoadBigImageActivity_;
 import com.example.well.luochen.mode.fragment.BDJFragment;
 import com.example.well.luochen.mode.fragment.BaseFragment;
 import com.example.well.luochen.net.info.BsbdjListinfo;
+import com.example.well.luochen.utils.ActivityCompatUtils;
 import com.example.well.luochen.utils.FileHelper;
 import com.example.well.luochen.utils.ImageHelper;
 import com.example.well.luochen.utils.Kit;
@@ -224,7 +224,8 @@ public class BDJAdapter extends BaseAdapter {
         mHolder.mIv_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoadBigImageActivity_.intent(mBdjFragment.mActivity).url(listinfo.image0).start();
+//                LoadBigImageActivity_.intent(mBdjFragment.mActivity).url(listinfo.image0).start();
+                ActivityCompatUtils.start(mBdjFragment.mActivity,listinfo.image0,iv);
             }
         });
 

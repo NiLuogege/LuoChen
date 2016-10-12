@@ -2,6 +2,10 @@ package com.example.well.luochen.mode.activity;
 
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.transition.Fade;
+import android.view.KeyEvent;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -9,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.well.luochen.R;
+import com.example.well.luochen.utils.ActivityCompatUtils;
 import com.example.well.luochen.utils.ImageHelper;
 import com.example.well.luochen.utils.LogUtils;
 import com.example.well.luochen.utils.MD5;
@@ -18,7 +23,6 @@ import com.example.well.luochen.view.hugeImageView.TileDrawable;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.File;
@@ -28,7 +32,7 @@ import java.io.File;
  */
 @EActivity(R.layout.activity_load_big_image)
 public class LoadBigImageActivity extends BaseActivity {
-    @Extra
+//    @Extra
     String url;
 
     @ViewById
@@ -38,6 +42,9 @@ public class LoadBigImageActivity extends BaseActivity {
 
     @AfterViews
     void initAfterViews() {
+        String url = getIntent().getStringExtra(ActivityCompatUtils.EXTRA_IMAGE_RESOUCE_ID);
+        this.url=url;
+
         LogUtils.logError("url=" + url);
         mMd5String = MD5.encodeMD5String(url);
         File file = new File(ImageHelper.ALBUM_PATH + mMd5String);
@@ -93,5 +100,17 @@ public class LoadBigImageActivity extends BaseActivity {
 
 
                 }).into(iv);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setSharedElementReturnTransition(new Fade(Fade.IN));
+            }
+            ActivityCompat.finishAfterTransition(LoadBigImageActivity.this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

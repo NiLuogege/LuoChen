@@ -32,6 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
+
         <activity
             android:name=".mode.activity.MainActivity_"
             android:screenOrientation="portrait"
@@ -43,6 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".mode.activity.LoadBigImageActivity_"
             android:screenOrientation="portrait"
