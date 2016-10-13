@@ -28,6 +28,7 @@ public class ImageFragment extends BaseFragment {
 
     @AfterViews
     void initAfterView() {
+
         mActivity = (MainActivity) getActivity();
 
         ImageLoadingListener imageLoadingListener = new ImageLoadingListener() {
