@@ -1,0 +1,37 @@
+package com.example.well.luochen.mode.activity;
+
+import android.support.v7.widget.Toolbar;
+
+import com.example.well.luochen.R;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
+/**
+ * Created by Well on 2016/10/13.
+ */
+
+@EActivity(R.layout.activity_image_me)
+public class MeImageActivity extends BaseActivity {
+    @ViewById
+    Toolbar tl_me;
+
+
+    @AfterViews
+    void initAfterViews() {
+        tl_me.inflateMenu(R.menu.menu_toolbar_meimage);
+        tl_me.setNavigationIcon(R.mipmap.logo);
+        tl_me.setLogo(R.mipmap.logo);
+        tl_me.setSubtitle("subtitle");
+        tl_me.setTitle("title");
+        tl_me.setOnCreateContextMenuListener(this);
+
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main,menu);
+//        return true;
+//    }
+}

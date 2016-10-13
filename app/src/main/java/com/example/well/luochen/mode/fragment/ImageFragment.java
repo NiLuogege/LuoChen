@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.example.well.luochen.R;
 import com.example.well.luochen.mode.activity.MVImageActivity_;
 import com.example.well.luochen.mode.activity.MainActivity;
+import com.example.well.luochen.mode.activity.MeImageActivity_;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -72,7 +73,7 @@ public class ImageFragment extends BaseFragment {
 
     @Click
     void iv_me() {
-
+        MeImageActivity_.intent(mActivity).start();
     }
 
     @Click

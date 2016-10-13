@@ -70,6 +70,13 @@
             android:theme="@style/TranslucentNavigationTheme"
             android:windowSoftInputMode="adjustNothing"/>
 
+        <!--我的图片-->
+        <activity
+            android:name="com.example.well.luochen.mode.activity.MeImageActivity_"
+            android:screenOrientation="portrait"
+            android:theme="@style/toolbar_me"
+            android:windowSoftInputMode="adjustNothing"/>
+
         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"  全屏-->
 
 
