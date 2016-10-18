@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.widget.TextView;
 
 import com.example.well.luochen.R;
 import com.example.well.luochen.jcvideoplayer.JCVideoPlayer;
@@ -29,6 +30,8 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
     CustomViewPager vp;
     @ViewById
     NavigationTabBar ntb_vertical;
+    @ViewById
+    TextView titleTv;
 
     private MainActivity mActivity;
 
@@ -38,6 +41,7 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
 
     @AfterViews
     void initAfterView() {
+        titleTv.setText("豆瓣最受欢迎的影评");
         initViewPager();
         initTabBar();
         initListener();
@@ -100,6 +104,7 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
         FragmentManager sfm = mActivity.getSupportFragmentManager();
 
         ArrayList<Fragment> list = new ArrayList<>();
+        DouBanMoveFragment douBanMoveFragment = DouBanMoveFragment_.builder().build();
         com.example.well.luochen.mode.fragment.ImageFragment ImageFragment = ImageFragment_.builder().build();
         MusicFragment_ musicFragment_ = new MusicFragment_();
         mBdjFragment = new BDJFragment_();
@@ -107,6 +112,7 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
         DemoFragment_ demoFragment2 = new DemoFragment_();
         DemoFragment_ demoFragment3 = new DemoFragment_();
 
+        list.add(douBanMoveFragment);
         list.add(ImageFragment);
         list.add(musicFragment_);
         list.add(mBdjFragment);
@@ -127,6 +133,9 @@ public class ContentFragment extends BaseFragment implements ViewPager.OnPageCha
     @Override
     public void onPageSelected(int position) {
         JCVideoPlayer.releaseAllVideos();
+        if(position==0){
+            titleTv.setText("豆瓣最受欢迎的影评");
+        }
     }
 
     @Override

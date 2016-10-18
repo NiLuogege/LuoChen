@@ -39,8 +39,7 @@ public class DemoFragment extends BaseFragment {
 
 
     @AfterViews
-    void initAfterViews()
-    {
+    void initAfterViews() {
 
         mActivity = getActivity();
 
@@ -48,23 +47,20 @@ public class DemoFragment extends BaseFragment {
     }
 
     @Click
-    void btn()
-    {
+    void btn() {
         Drawable drawable = changeDrawableColor(R.drawable.im_specialist, R.color.hehe2, mActivity);
         imageView00.setImageDrawable(drawable);
     }
 
 
-
     @Click
-    void btn_download()
-    {
+    void btn_download() {
         DownloadManager instance = DownloadManager.getInstance();
         DownloadInfo downloadInfo = new DownloadInfo();
 //        downloadInfo.setDownloadURL("http://dl.stream.qqmusic.qq.com/104133518.mp3");
 //        downloadInfo.setDownloadURL("http://stream10.qqmusic.qq.com/34833285.mp3");
         downloadInfo.setDownloadURL("http://ws.stream.qqmusic.qq.com/4833285.m4a?fromtag=46");
-        downloadInfo= DownloadInfo.downloadPath(downloadInfo);
+        downloadInfo = DownloadInfo.downloadPath(downloadInfo);
         instance.download(downloadInfo);
     }
 
@@ -92,8 +88,7 @@ public class DemoFragment extends BaseFragment {
 //        return updateBitmap;
 //    }
 
-    public Drawable changeDrawableColor(int drawableRes, int colorRes, Context context)
-    {
+    public Drawable changeDrawableColor(int drawableRes, int colorRes, Context context) {
         int color = context.getResources().getColor(colorRes);
         float r = Color.red(color) / 255f;
         float g = Color.green(color) / 255f;
@@ -101,10 +96,10 @@ public class DemoFragment extends BaseFragment {
 
 
         ColorMatrix cm = new ColorMatrix();
-        cm.set(new float[] {  r, 0, 0, 0, 0,// 红色值
-                               0, g, 0, 0, 0,// 绿色值
-                               0, 0,b, 0, 0,// 蓝色值
-                               0, 0, 0, 1, 0 // 透明度
+        cm.set(new float[]{r, 0, 0, 0, 0,// 红色值
+                0, g, 0, 0, 0,// 绿色值
+                0, 0, b, 0, 0,// 蓝色值
+                0, 0, 0, 1, 0 // 透明度
         });
         Drawable drawable = context.getResources().getDrawable(drawableRes);
         drawable.setColorFilter(new ColorMatrixColorFilter(cm));
