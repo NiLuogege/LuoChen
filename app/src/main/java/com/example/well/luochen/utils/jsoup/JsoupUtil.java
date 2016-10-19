@@ -1,9 +1,8 @@
 package com.example.well.luochen.utils.jsoup;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Environment;
 
-import com.example.well.luochen.utils.LogUtils;
 import com.example.well.luochen.view.AutoSwipeRefreshLayout;
 
 import org.jsoup.Jsoup;
@@ -66,12 +65,12 @@ public class JsoupUtil {
     /**
      * 获得影评页面的数据
      *
-     * @param context
+     * @param activity
      * @param i       0表示第一页,10表示第二页,20表示第三页...40表示第五页  共5页
      * @param asrl
      * @return
      */
-    public List<Move> getDoubanReview(Context context, int i, AutoSwipeRefreshLayout asrl) {
+    public List<Move> getDoubanReview(Activity activity, int i, final AutoSwipeRefreshLayout asrl) {
         String used = "";
         List<Move> data = new ArrayList<>();
         String url = "http://movie.douban.com/review/best/?start=%s";
@@ -89,10 +88,15 @@ public class JsoupUtil {
             return addCommentList;
 
         } catch (IOException e) {
-            if(null!=asrl){
+            if (null != asrl) {
                 boolean refreshing = asrl.isRefreshing();
-                if(refreshing){
-                    asrl.setRefreshing(false);
+                if (refreshing) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            asrl.setRefreshing(false);
+                        }
+                    });
                 }
             }
             e.printStackTrace();
@@ -118,7 +122,7 @@ public class JsoupUtil {
             for (Element l : left) {
                 used = l.text();
                 move.used = used;//多少有用多少没用
-                LogUtils.logError("text1= " + used);
+//                LogUtils.logError("text1= " + used);
             }
             if (text.contains(used)) {
                 String comment = text.replace(used, "");
@@ -179,6 +183,96 @@ public class JsoupUtil {
         }
 
         return list;
+    }
+
+    public MoveDetail getDoubanMoveDetail(String url) throws IOException {
+        Document document = Jsoup.connect(url).timeout(5000).get();
+        MoveDetail moveDetail = new MoveDetail();
+        MoveDetail addInfo = getInfo(document, moveDetail);
+        MoveDetail addRatingNum = getRatingNum(document, addInfo);
+        MoveDetail addIntro = getIntro(document, addRatingNum);
+        MoveDetail addImage = getImage(document, addIntro);
+        return addImage;
+    }
+
+    /**
+     * 获取剧照
+     *
+     * @param document
+     * @param addIntro
+     */
+    private MoveDetail getImage(Document document, MoveDetail addIntro) {
+        List<String> imageList = addIntro.imageList;
+        Elements elementsByClass = document.getElementsByClass("related-pic-bd");
+        Elements select = elementsByClass.select("img[src]");
+        for (int i = 0; i < select.size(); i++) {
+            Element element = select.get(i);
+            String src = element.attr("abs:src");
+            imageList.add(src);
+//            LogUtils.logError("attr= " + src);
+        }
+        return addIntro;
+    }
+
+    /**
+     * 获得剧情简介
+     *
+     * @param document
+     * @param addRatingNum
+     */
+    private MoveDetail getIntro(Document document, MoveDetail addRatingNum) {
+        Element elementById = document.getElementById("link-report");
+        String intro = elementById.text();
+        addRatingNum.Intro = intro;
+//        LogUtils.logError("text="+intro);
+        return addRatingNum;
+    }
+
+
+    /**
+     * 获得好评度
+     *
+     * @param document
+     * @param addInfo
+     */
+    private MoveDetail getRatingNum(Document document, MoveDetail addInfo) {
+        Elements select = document.select("strong.ll");
+        Element first = select.first();
+        String rating = first.text();
+        addInfo.RatingNum = Float.parseFloat(rating);
+//        LogUtils.logError("大小= "+select.size()+ " 好评度= "+rating);
+        return addInfo;
+    }
+
+    /**
+     * 获得电影文字信息
+     *
+     * @param document
+     * @param moveDetail
+     */
+    private MoveDetail getInfo(Document document, MoveDetail moveDetail) {
+        StringBuffer sb = new StringBuffer();
+        Element info = document.getElementById("info");
+        Elements children = info.children();
+        for (int i = 0; i < children.size(); i++) {
+            Element element = children.get(i);
+            String text = element.text();
+            sb.append(text);
+            sb.append(" ");
+        }
+        String s = sb.toString();
+        String[] split = s.split("  ");
+//        LogUtils.logError("操作之后-----------------");
+        sb = new StringBuffer();
+        for (int i = 0; i < split.length; i++) {
+            String s1 = split[i];
+            sb.append(s1);
+            sb.append("\n");
+        }
+        String s1 = sb.toString();
+        moveDetail.info = s1;
+//        LogUtils.logError("s1= " + s1);//电影的文字信息
+        return moveDetail;
     }
 
 }  

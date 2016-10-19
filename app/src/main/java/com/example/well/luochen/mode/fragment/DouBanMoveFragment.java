@@ -1,11 +1,17 @@
 package com.example.well.luochen.mode.fragment;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.ChangeImageTransform;
+import android.transition.Transition;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.well.luochen.R;
+import com.example.well.luochen.mode.activity.DoubanMoveDetailActivity_;
 import com.example.well.luochen.utils.GlideUtils;
 import com.example.well.luochen.utils.LogUtils;
 import com.example.well.luochen.utils.SpacesItemDecoration;
@@ -39,10 +46,13 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     @ViewById
     RelativeLayout rl_root;
     private FragmentActivity mActivity;
-    private List<Move> mMoveList=new ArrayList<>();
-    private DouBanMoveAdapter mAdapter=new DouBanMoveAdapter();
+    private List<Move> mMoveList = new ArrayList<>();
+    private DouBanMoveAdapter mAdapter = new DouBanMoveAdapter();
 
-    private int page=0;
+    public static String sharedName="sharedName";
+    public static String extre="extre";
+
+    private int page = 0;
 
     @AfterViews
     void initAfterViews() {
@@ -68,7 +78,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
             public void run() {
                 asrl.autoRefresh();
                 JsoupUtil ju = JsoupUtil.getInstance();
-                page=0;
+                page = 0;
                 mMoveList = ju.getDoubanReview(mActivity, page, asrl);
                 if (null != mMoveList && mMoveList.size() > 0) {
 
@@ -91,13 +101,13 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
         new Thread(new Runnable() {
             @Override
             public void run() {
-                page+=10;
-                if(page>40){
-                    Snackbar.make(rl_root,"没有数据了!",Snackbar.LENGTH_LONG).show();
+                page += 10;
+                if (page > 40) {
+                    Snackbar.make(rl_root, "没有数据了!", Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 JsoupUtil ju = JsoupUtil.getInstance();
-                List<Move> doubanReview = ju.getDoubanReview(mActivity, page,asrl);
+                List<Move> doubanReview = ju.getDoubanReview(mActivity, page, asrl);
                 if (null != doubanReview && doubanReview.size() > 0) {
                     mMoveList.addAll(doubanReview);
                     LogUtils.logError("加载更多= " + doubanReview.size() + "  " + doubanReview.toString());
@@ -124,6 +134,24 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
         getData();
     }
 
+
+    private void startSecondActivity(String URL,ImageView iv) {
+        Intent intent = new Intent(this.mActivity, DoubanMoveDetailActivity_.class);
+        intent.putExtra(extre, URL);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            LogUtils.logError("高版本");
+            Transition transition = new ChangeImageTransform();
+            transition.setDuration(3000);
+            mActivity.getWindow().setExitTransition(transition);
+            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(mActivity, iv, "big_img");
+//            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, Pair.create((View) iv, sharedName));
+            Bundle bundle = activityOptions.toBundle();
+            startActivity(intent, bundle);
+        } else {
+            Snackbar.make(rl_root,"低版本",Snackbar.LENGTH_LONG).show();
+            startActivity(intent);
+        }
+    }
 
     public class DouBanMoveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -153,14 +181,32 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
             if (position != mMoveList.size() - 1 + 1) {
                 DouBanMoveFragment.DouBanMoveAdapter.ViewHolder myHolder = (DouBanMoveFragment.DouBanMoveAdapter.ViewHolder) holder;
                 Move move = mMoveList.get(position);
-                GlideUtils.displayImageView(mActivity, move.coverUrl, myHolder.mIv_cover, R.drawable.load_failed);
+                final String coverUrl = move.coverUrl;
+                final ImageView iv_cover = myHolder.mIv_cover;
+                GlideUtils.displayImageView(mActivity, coverUrl, iv_cover, R.drawable.load_failed);
                 myHolder.mTv_name.setText(move.name);
                 myHolder.mTv_comment.setText(move.comment);
                 myHolder.mTv_usede.setText(move.used);
+                myHolder.mIv_cover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        DoubanMoveDetailActivity_.intent(mActivity).start();
+//                        DoubanMoveDetailActivity_ doubanMoveDetailActivity_ = new DoubanMoveDetailActivity_();
+//                        ActivityCompatUtils.start(doubanMoveDetailActivity_, coverUrl, iv_cover);
+//                        Snackbar.make(rl_root,"haha",Snackbar.LENGTH_LONG).show();
 
+                        startSecondActivity(coverUrl,iv_cover);
+//                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, iv_cover, sharedName);
+//                        Intent intent = new Intent(mActivity,DoubanMoveDetailActivity_.class);
+//                        intent.putExtra(extre, coverUrl);
+//                        ActivityCompat.startActivity(mActivity,intent,options.toBundle());
+                    }
+                });
             } else {//加载更多
                 loadMoreData();
             }
+
+
         }
 
         @Override

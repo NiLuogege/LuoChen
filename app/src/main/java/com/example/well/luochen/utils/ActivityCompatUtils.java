@@ -22,7 +22,7 @@ public class ActivityCompatUtils {
     public static void start(Activity activity, String resId, ImageView imageView) {
         Intent intent = new Intent(activity, LoadBigImageActivity_.class);
         intent.putExtra(EXTRA_IMAGE_RESOUCE_ID, resId);
-
+LogUtils.logError("activity="+activity+" imageView="+imageView);
         //noinspection unchecked
         Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
                 Pair.create((View) imageView, TRANSITION_NAME_PHOTO))

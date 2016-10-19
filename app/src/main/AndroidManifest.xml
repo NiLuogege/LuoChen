@@ -76,6 +76,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/toolbar_me"
             android:windowSoftInputMode="adjustNothing"/>
+        <!--豆瓣电影详情-->
+        <activity
+            android:name="com.example.well.luochen.mode.activity.DoubanMoveDetailActivity_"
+            android:screenOrientation="portrait"
+            android:theme="@style/toolbar_me"
+            android:windowSoftInputMode="adjustNothing"/>
 
         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"  全屏-->
 
