@@ -3,6 +3,9 @@ package com.example.well.luochen.utils.jsoup;
 import android.content.Context;
 import android.os.Environment;
 
+import com.example.well.luochen.utils.LogUtils;
+import com.example.well.luochen.view.AutoSwipeRefreshLayout;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -61,12 +64,14 @@ public class JsoupUtil {
     }
 
     /**
+     * 获得影评页面的数据
      *
      * @param context
-     * @param i 0表示第一页,10表示第二页,20表示第三页...40表示第五页  共5页
+     * @param i       0表示第一页,10表示第二页,20表示第三页...40表示第五页  共5页
+     * @param asrl
      * @return
      */
-    public List<Move> getDoubanReview(Context context, int i) {
+    public List<Move> getDoubanReview(Context context, int i, AutoSwipeRefreshLayout asrl) {
         String used = "";
         List<Move> data = new ArrayList<>();
         String url = "http://movie.douban.com/review/best/?start=%s";
@@ -75,7 +80,7 @@ public class JsoupUtil {
 //            InputStream open = context.getAssets().open("douban.html");
 //            Document document = Jsoup.parse(open, "UTF-8", "https://movie.douban.com");
             String format = String.format(url, i);
-            Document document = Jsoup.connect(format).get();
+            Document document = Jsoup.connect(format).timeout(5000).get();
 //            Document document = Jsoup.connect("https://movie.douban.com/nowplaying/shanghai/").timeout(5000).post();
             List<Move> addNameList = getMoveName(document, data);
             List<Move> addImageList = getMoveImage(document, addNameList);
@@ -84,6 +89,12 @@ public class JsoupUtil {
             return addCommentList;
 
         } catch (IOException e) {
+            if(null!=asrl){
+                boolean refreshing = asrl.isRefreshing();
+                if(refreshing){
+                    asrl.setRefreshing(false);
+                }
+            }
             e.printStackTrace();
         }
         return null;
@@ -102,16 +113,20 @@ public class JsoupUtil {
             Element ebc = elementsByClass.get(i);
             Move move = hasImageList.get(i);
             String text = ebc.text();
+//            LogUtils.logError("刚开始的评论= " + text);
             Elements left = ebc.getElementsByClass("left");
             for (Element l : left) {
                 used = l.text();
                 move.used = used;//多少有用多少没用
-//                LogUtils.logError("text1= " + used);
+                LogUtils.logError("text1= " + used);
             }
             if (text.contains(used)) {
                 String comment = text.replace(used, "");
                 move.comment = comment;//评论
 //                LogUtils.logError("comment= " + comment);
+            } else {
+                move.comment = "这盘影评可能有剧透!";//评论
+//                LogUtils.logError("comment= " + "这盘影评可能有剧透!");
             }
 
         }

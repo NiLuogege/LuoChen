@@ -1,5 +1,6 @@
 package com.example.well.luochen.mode.fragment;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.well.luochen.R;
@@ -22,6 +24,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,9 +36,13 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     AutoSwipeRefreshLayout asrl;
     @ViewById
     RecyclerView list_rv;
+    @ViewById
+    RelativeLayout rl_root;
     private FragmentActivity mActivity;
-    private List<Move> mMoveList;
-    private DouBanMoveAdapter mAdapter;
+    private List<Move> mMoveList=new ArrayList<>();
+    private DouBanMoveAdapter mAdapter=new DouBanMoveAdapter();
+
+    private int page=0;
 
     @AfterViews
     void initAfterViews() {
@@ -52,18 +59,53 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
     private void initData() {
+        getData();
+    }
+
+    private void getData() {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                asrl.autoRefresh();
                 JsoupUtil ju = JsoupUtil.getInstance();
-                mMoveList = ju.getDoubanReview(mActivity, 0);
+                page=0;
+                mMoveList = ju.getDoubanReview(mActivity, page, asrl);
                 if (null != mMoveList && mMoveList.size() > 0) {
 
-                    LogUtils.logError("jieguo= " + mMoveList.size() + "  " + mMoveList.toString());
+                    LogUtils.logError("刷新= " + mMoveList.size() + "  " + mMoveList.toString());
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             onLoadDataSuccess();
+                            asrl.setRefreshing(false);
+                        }
+                    });
+
+                }
+            }
+        }).start();
+    }
+
+    private void loadMoreData() {
+        asrl.setRefreshing(true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                page+=10;
+                if(page>40){
+                    Snackbar.make(rl_root,"没有数据了!",Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                JsoupUtil ju = JsoupUtil.getInstance();
+                List<Move> doubanReview = ju.getDoubanReview(mActivity, page,asrl);
+                if (null != doubanReview && doubanReview.size() > 0) {
+                    mMoveList.addAll(doubanReview);
+                    LogUtils.logError("加载更多= " + doubanReview.size() + "  " + doubanReview.toString());
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            asrl.setRefreshing(false);
                         }
                     });
 
@@ -79,7 +121,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
 
     @Override
     public void onRefresh() {
-        asrl.setRefreshing(false);
+        getData();
     }
 
 
@@ -117,7 +159,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
                 myHolder.mTv_usede.setText(move.used);
 
             } else {//加载更多
-//                loadMoreMVData();
+                loadMoreData();
             }
         }
 
