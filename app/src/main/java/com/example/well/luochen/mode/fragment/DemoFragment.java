@@ -13,16 +13,11 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
 
 import com.example.well.luochen.R;
-import com.example.well.luochen.utils.LogUtils;
-import com.example.well.luochen.utils.jsoup.JsoupUtil;
-import com.example.well.luochen.utils.jsoup.MoveDetail;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-
-import java.io.IOException;
 
 /**
  * Created by Well on 2016/7/15.
@@ -58,17 +53,7 @@ public class DemoFragment extends BaseFragment {
 
     @Click
     void btn_download() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    MoveDetail doubanMoveDetail = JsoupUtil.getInstance().getDoubanMoveDetail("https://movie.douban.com/subject/3793783/");
-                    LogUtils.logError("doubanMoveDetail=" + doubanMoveDetail.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
 
 
 //        DownloadManager instance = DownloadManager.getInstance();

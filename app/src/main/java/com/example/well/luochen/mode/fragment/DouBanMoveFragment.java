@@ -51,7 +51,8 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     private DouBanMoveAdapter mAdapter = new DouBanMoveAdapter();
 
     public static String sharedName = "sharedName";
-    public static String extre = "extre";
+    public static String extre_url_pic = "extre_url_pic";
+    public static String extre_url_detail = "extre_url_detail";
 
     private int page = 0;
 
@@ -136,9 +137,10 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
 
-    private void startSecondActivity(String URL, ImageView iv) {
+    private void startSecondActivity(String moveName, String URL, ImageView iv) {
         Intent intent = new Intent(this.mActivity, DoubanMoveDetailActivity_.class);
-        intent.putExtra(extre, URL);
+        intent.putExtra(extre_url_pic, URL);
+        intent.putExtra(extre_url_detail, moveName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             LogUtils.logError("高版本");
             Transition transition = new ChangeImageTransform();
@@ -183,6 +185,8 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
                 Move move = mMoveList.get(position);
                 final String coverUrl = move.coverUrl;
                 final ImageView iv_cover = myHolder.mIv_cover;
+                final String linkUrl = move.linkUrl;
+
                 GlideUtils.displayImageView(mActivity, coverUrl, iv_cover, R.drawable.load_failed);
                 myHolder.mTv_name.setText(move.name);
                 myHolder.mTv_comment.setText(move.comment);
@@ -190,16 +194,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
                 myHolder.mIv_cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        DoubanMoveDetailActivity_.intent(mActivity).start();
-//                        DoubanMoveDetailActivity_ doubanMoveDetailActivity_ = new DoubanMoveDetailActivity_();
-//                        ActivityCompatUtils.start(doubanMoveDetailActivity_, coverUrl, iv_cover);
-//                        Snackbar.make(rl_root,"haha",Snackbar.LENGTH_LONG).show();
-
-                        startSecondActivity(coverUrl, iv_cover);
-//                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, iv_cover, sharedName);
-//                        Intent intent = new Intent(mActivity,DoubanMoveDetailActivity_.class);
-//                        intent.putExtra(extre, coverUrl);
-//                        ActivityCompat.startActivity(mActivity,intent,options.toBundle());
+                        startSecondActivity(linkUrl, coverUrl, iv_cover);
                     }
                 });
             } else {//加载更多

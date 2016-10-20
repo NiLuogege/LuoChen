@@ -2,6 +2,7 @@ package com.example.well.luochen.utils.jsoup;
 
 import android.app.Activity;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import com.example.well.luochen.view.AutoSwipeRefreshLayout;
 
@@ -66,7 +67,7 @@ public class JsoupUtil {
      * 获得影评页面的数据
      *
      * @param activity
-     * @param i       0表示第一页,10表示第二页,20表示第三页...40表示第五页  共5页
+     * @param i        0表示第一页,10表示第二页,20表示第三页...40表示第五页  共5页
      * @param asrl
      * @return
      */
@@ -192,7 +193,17 @@ public class JsoupUtil {
         MoveDetail addRatingNum = getRatingNum(document, addInfo);
         MoveDetail addIntro = getIntro(document, addRatingNum);
         MoveDetail addImage = getImage(document, addIntro);
-        return addImage;
+        MoveDetail addName = getName(document, addImage);
+        return addName;
+    }
+
+    private MoveDetail getName(Document document, MoveDetail addIntro) {
+        Elements h1 = document.select("h1");
+        Element first = h1.first();
+        String name = first.text();
+//        LogUtils.logError("name=" + name);
+        addIntro.name = name;
+        return addIntro;
     }
 
     /**
@@ -203,14 +214,43 @@ public class JsoupUtil {
      */
     private MoveDetail getImage(Document document, MoveDetail addIntro) {
         List<String> imageList = addIntro.imageList;
-        Elements elementsByClass = document.getElementsByClass("related-pic-bd");
-        Elements select = elementsByClass.select("img[src]");
-        for (int i = 0; i < select.size(); i++) {
-            Element element = select.get(i);
-            String src = element.attr("abs:src");
-            imageList.add(src);
-//            LogUtils.logError("attr= " + src);
+        Elements nbgnbg = document.getElementsByClass("nbgnbg");
+        Elements select1 = nbgnbg.select("[href]");
+        String attr = select1.attr("abs:href");
+
+
+        try {
+            Document document1 = Jsoup.connect(attr).timeout(5000).get();
+            Elements cover = document1.getElementsByClass("cover");
+            for (int i = 0; i < cover.size(); i++) {
+                Element element = cover.get(i);
+                Elements select = element.select("a[href]");
+                Element first = select.first();
+                String attr1 = first.attr("abs:href");
+
+                Document document2 = Jsoup.connect(attr1).timeout(5000).get();
+                Elements mainphoto = document2.getElementsByClass("mainphoto");
+                Element first1 = mainphoto.first();
+                Elements select2 = first1.select("[src]");
+                Element first2 = select2.first();
+                String attr2 = first2.attr("abs:src");
+                imageList.add(attr2);
+//                LogUtils.logError("attr2="+attr2);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+//因为图片太小所以舍弃掉
+//        Elements elementsByClass = document.getElementsByClass("related-pic-bd");
+//        Elements select = elementsByClass.select("img[src]");
+//        for (int i = 0; i < select.size(); i++) {
+//            Element element = select.get(i);
+//            String src = element.attr("abs:src");
+//            imageList.add(src);
+////            LogUtils.logError("attr= " + src);
+//        }
         return addIntro;
     }
 
@@ -223,7 +263,7 @@ public class JsoupUtil {
     private MoveDetail getIntro(Document document, MoveDetail addRatingNum) {
         Element elementById = document.getElementById("link-report");
         String intro = elementById.text();
-        addRatingNum.Intro = intro;
+        addRatingNum.intro = intro;
 //        LogUtils.logError("text="+intro);
         return addRatingNum;
     }
@@ -239,7 +279,12 @@ public class JsoupUtil {
         Elements select = document.select("strong.ll");
         Element first = select.first();
         String rating = first.text();
-        addInfo.RatingNum = Float.parseFloat(rating);
+        if (!TextUtils.isEmpty(rating)) {
+            addInfo.ratingNum = Float.parseFloat(rating);
+        } else {
+            addInfo.ratingNum = 0;
+        }
+
 //        LogUtils.logError("大小= "+select.size()+ " 好评度= "+rating);
         return addInfo;
     }

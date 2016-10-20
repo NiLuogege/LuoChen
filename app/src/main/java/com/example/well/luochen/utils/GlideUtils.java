@@ -14,19 +14,26 @@ import com.bumptech.glide.request.target.Target;
  */
 
 public class GlideUtils {
-    public static void displayImageView(Context context, String url, ImageView tagitImageView, int onErrorDrawable){
-        Glide.with(context).load(url).dontAnimate().error(onErrorDrawable).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                if (null!=e)
-                LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
-                return false;
-            }
+    public static void displayImageView(Context context, String url, ImageView tagitImageView, int onErrorDrawable) {
 
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                return false;
-            }
-        }).into(tagitImageView);
+        try {
+            Glide.with(context).load(url).dontAnimate().error(onErrorDrawable).diskCacheStrategy(DiskCacheStrategy.SOURCE).listener(new RequestListener<String, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    if (null != e)
+                        LogUtils.logError("加载失败" + " e=" + e.toString() + " model=" + model);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    return false;
+                }
+            }).into(tagitImageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
