@@ -27,6 +27,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/splash"
+                android:transitionName="big_img"
                 app:layout_collapseMode="parallax"
                 />
 

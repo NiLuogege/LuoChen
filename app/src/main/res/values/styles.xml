@@ -95,6 +95,7 @@
         <!-- 窗口的背景颜色 -->
         <item name="android:windowBackground">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/toolbar</item>
+
     </style>
 
     <style name="toolbar" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">

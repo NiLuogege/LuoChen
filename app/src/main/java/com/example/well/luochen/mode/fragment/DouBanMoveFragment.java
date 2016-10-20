@@ -1,12 +1,13 @@
 package com.example.well.luochen.mode.fragment;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,8 +50,8 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     private List<Move> mMoveList = new ArrayList<>();
     private DouBanMoveAdapter mAdapter = new DouBanMoveAdapter();
 
-    public static String sharedName="sharedName";
-    public static String extre="extre";
+    public static String sharedName = "sharedName";
+    public static String extre = "extre";
 
     private int page = 0;
 
@@ -135,7 +136,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
 
-    private void startSecondActivity(String URL,ImageView iv) {
+    private void startSecondActivity(String URL, ImageView iv) {
         Intent intent = new Intent(this.mActivity, DoubanMoveDetailActivity_.class);
         intent.putExtra(extre, URL);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -143,12 +144,11 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
             Transition transition = new ChangeImageTransform();
             transition.setDuration(3000);
             mActivity.getWindow().setExitTransition(transition);
-            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(mActivity, iv, "big_img");
-//            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, Pair.create((View) iv, sharedName));
+//            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(mActivity, iv, "big_img");
+            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, Pair.create((View) iv, "big_img"));//向下兼容
             Bundle bundle = activityOptions.toBundle();
             startActivity(intent, bundle);
         } else {
-            Snackbar.make(rl_root,"低版本",Snackbar.LENGTH_LONG).show();
             startActivity(intent);
         }
     }
@@ -195,7 +195,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
 //                        ActivityCompatUtils.start(doubanMoveDetailActivity_, coverUrl, iv_cover);
 //                        Snackbar.make(rl_root,"haha",Snackbar.LENGTH_LONG).show();
 
-                        startSecondActivity(coverUrl,iv_cover);
+                        startSecondActivity(coverUrl, iv_cover);
 //                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, iv_cover, sharedName);
 //                        Intent intent = new Intent(mActivity,DoubanMoveDetailActivity_.class);
 //                        intent.putExtra(extre, coverUrl);
