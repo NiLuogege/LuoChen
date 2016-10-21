@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.well.luochen.R;
 import com.example.well.luochen.mode.activity.DoubanMoveDetailActivity_;
 import com.example.well.luochen.utils.GlideUtils;
+import com.example.well.luochen.utils.Kit;
 import com.example.well.luochen.utils.LogUtils;
 import com.example.well.luochen.utils.SpacesItemDecoration;
 import com.example.well.luochen.utils.jsoup.JsoupUtil;
@@ -137,7 +138,13 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
     }
 
 
-    private void startSecondActivity(String moveName, String URL, ImageView iv) {
+    private void start2DouBanMoveDetailActivity(String moveName, String URL, ImageView iv) {
+        boolean networkAvailable = Kit.isNetworkAvailable(this.mActivity);
+        LogUtils.logError("网络="+networkAvailable);
+        if (!networkAvailable) {
+            Snackbar.make(rl_root,"请检查网络!",Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(this.mActivity, DoubanMoveDetailActivity_.class);
         intent.putExtra(extre_url_pic, URL);
         intent.putExtra(extre_url_detail, moveName);
@@ -194,7 +201,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
                 myHolder.mIv_cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startSecondActivity(linkUrl, coverUrl, iv_cover);
+                        start2DouBanMoveDetailActivity(linkUrl, coverUrl, iv_cover);
                     }
                 });
             } else {//加载更多

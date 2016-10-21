@@ -137,7 +137,7 @@ public class JsoupUtil {
                 move.comment = comment;//评论
 //                LogUtils.logError("comment= " + comment);
             } else {
-                move.comment = "这盘影评可能有剧透!";//评论
+                move.comment = "这条影评可能有剧透!";//评论
 //                LogUtils.logError("comment= " + "这盘影评可能有剧透!");
             }
 

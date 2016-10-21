@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -54,6 +56,8 @@ public class DoubanMoveDetailActivity extends BaseActivity {
     LinearLayout ll;
     @ViewById
     RatingBar rb;
+    @ViewById
+    CoordinatorLayout cl_root;
     private MoveDetail mMoveDetail = new MoveDetail();
     private GIFLoadingFragment mGifLoadingFragment;
     private String mUrl_detail;
@@ -86,6 +90,9 @@ public class DoubanMoveDetailActivity extends BaseActivity {
                     });
 
                 } catch (IOException e) {
+                    Snackbar.make(cl_root, "获取数据失败", Snackbar.LENGTH_LONG).show();
+                    mGifLoadingFragment.dismiss();
+                    ActivityCompat.finishAfterTransition(DoubanMoveDetailActivity.this);
                     e.printStackTrace();
                 }
             }
@@ -180,6 +187,11 @@ public class DoubanMoveDetailActivity extends BaseActivity {
     }
 
     private void start2LoadBigActivity(String URL, ImageView iv) {
+        boolean networkAvailable = Kit.isNetworkAvailable(DoubanMoveDetailActivity.this);
+        if (!networkAvailable) {
+            Snackbar.make(cl_root,"请检查网络!",Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(DoubanMoveDetailActivity.this, LoadBigImageActivity_.class);
         intent.putExtra(ActivityCompatUtils.EXTRA_IMAGE_RESOUCE_ID, URL);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
