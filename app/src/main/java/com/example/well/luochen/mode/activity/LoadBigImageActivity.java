@@ -4,7 +4,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.transition.Fade;
 import android.view.KeyEvent;
 
 import com.bumptech.glide.Glide;
@@ -106,7 +105,7 @@ public class LoadBigImageActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setSharedElementReturnTransition(new Fade(Fade.IN));
+//                getWindow().setSharedElementReturnTransition(new Fade(Fade.IN));
             }
             ActivityCompat.finishAfterTransition(LoadBigImageActivity.this);
             return true;

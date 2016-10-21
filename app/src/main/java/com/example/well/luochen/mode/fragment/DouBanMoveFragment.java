@@ -147,7 +147,7 @@ public class DouBanMoveFragment extends BaseFragment implements SwipeRefreshLayo
             transition.setDuration(3000);
             mActivity.getWindow().setExitTransition(transition);
 //            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(mActivity, iv, "big_img");
-            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, Pair.create((View) iv, "big_img"));//向下兼容
+            ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(mActivity, Pair.create((View) iv, "share_img"));//向下兼容
             Bundle bundle = activityOptions.toBundle();
             startActivity(intent, bundle);
         } else {

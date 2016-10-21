@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.example.well.luochen.utils.ToastUtils;
 import com.example.well.luochen.view.AutoSwipeRefreshLayout;
 
 import org.jsoup.Jsoup;
@@ -71,7 +72,7 @@ public class JsoupUtil {
      * @param asrl
      * @return
      */
-    public List<Move> getDoubanReview(Activity activity, int i, final AutoSwipeRefreshLayout asrl) {
+    public List<Move> getDoubanReview(final Activity activity, int i, final AutoSwipeRefreshLayout asrl) {
         String used = "";
         List<Move> data = new ArrayList<>();
         String url = "http://movie.douban.com/review/best/?start=%s";
@@ -81,7 +82,12 @@ public class JsoupUtil {
 //            Document document = Jsoup.parse(open, "UTF-8", "https://movie.douban.com");
             String format = String.format(url, i);
             Document document = Jsoup.connect(format).timeout(5000).get();
-//            Document document = Jsoup.connect("https://movie.douban.com/nowplaying/shanghai/").timeout(5000).post();
+//            Document document = Jsoup.connect(format)
+//                    .data("query", "Java")
+//                    .userAgent("Mozilla")
+//                    .cookie("auth", "token")
+//                    .timeout(5000)
+//                    .post();
             List<Move> addNameList = getMoveName(document, data);
             List<Move> addImageList = getMoveImage(document, addNameList);
             List<Move> addCommentList = getMoveComment(used, document, addImageList);
@@ -96,6 +102,7 @@ public class JsoupUtil {
                         @Override
                         public void run() {
                             asrl.setRefreshing(false);
+                            ToastUtils.show(activity,"请求网络失败");
                         }
                     });
                 }

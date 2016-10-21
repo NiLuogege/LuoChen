@@ -17,7 +17,7 @@ import com.example.well.luochen.mode.activity.LoadBigImageActivity_;
 
 public class ActivityCompatUtils {
     public static final String EXTRA_IMAGE_RESOUCE_ID = "EXTRA_IMAGE_RESOUCE_ID";
-    public static final String TRANSITION_NAME_PHOTO = "TRANSITION_NAME_PHOTO";
+    public static final String TRANSITION_NAME_PHOTO = "share_img";
 
     public static void start(Activity activity, String resId, ImageView imageView) {
         Intent intent = new Intent(activity, LoadBigImageActivity_.class);

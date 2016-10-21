@@ -53,7 +53,9 @@ public class DemoFragment extends BaseFragment {
 
     @Click
     void btn_download() {
-
+        GIFLoadingFragment gifLoadingFragment = new GIFLoadingFragment();
+        android.support.v4.app.FragmentManager supportFragmentManager = mActivity.getSupportFragmentManager();
+        gifLoadingFragment.show(supportFragmentManager,"");
 
 
 //        DownloadManager instance = DownloadManager.getInstance();
