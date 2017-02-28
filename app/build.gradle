@@ -25,6 +25,24 @@ android {
     useLibrary 'org.apache.http.legacy'
 }
 
+/***** greenDao****/
+apply plugin: 'org.greenrobot.greendao'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
+    }
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.example.well.luochen.net.rxretrofit.gen'
+    targetGenDir 'src/main/java'
+}
+/******************************/
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/universal-image-loader-1.9.2-with-sources.jar')
@@ -38,17 +56,13 @@ dependencies {
     compile 'com.github.rey5137:material:1.2.4'
     //这个是 md 的各种控件
     compile 'com.yolanda.nohttp:nohttp:1.0.2'
-    //    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-    //    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
-    //    compile 'com.github.danylovolokh:video-player-manager:0.2.0'
-    //    compile 'com.github.danylovolokh:list-visibility-utils:0.2.0'
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'com.android.support:support-v4:23.4.0'
     //    compile 'com.google.android.gms:play-services:8.4.0'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+//    testCompile 'junit:junit:4.12'
+//    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+//    androidTestCompile 'com.android.support.test:runner:0.5'
+//    androidTestCompile 'com.android.support:support-annotations:23.4.0'
     compile 'com.android.support:multidex:1.0.1'
     compile files('libs/image_zoom.jar')
     compile 'com.github.devlight.navigationtabbar:navigationtabbar:1.2.3'
@@ -63,6 +77,20 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:2.2.4'
     //recycle的动画
     compile files('libs/jsoup-1.9.2.jar')
+
+
+    /***** retrofit + rxJava 网络请求****/
+    /*greenDao*/
+    compile 'org.greenrobot:greendao:3.2.0'
+    /*rx-android-java*/
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.trello:rxlifecycle:1.0'
+    compile 'com.trello:rxlifecycle-components:1.0'
+    /*rotrofit*/
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'//日志输出
+    /******************************/
 }
 
 apt {

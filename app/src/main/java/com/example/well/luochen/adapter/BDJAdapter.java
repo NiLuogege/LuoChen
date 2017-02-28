@@ -25,7 +25,7 @@ import com.example.well.luochen.jcvideoplayer.JCVideoPlayer;
 import com.example.well.luochen.jcvideoplayer.JCVideoPlayerStandard;
 import com.example.well.luochen.mode.fragment.BDJFragment;
 import com.example.well.luochen.mode.fragment.BaseFragment;
-import com.example.well.luochen.net.info.BsbdjListinfo;
+import com.example.well.luochen.net_okhttp.info.BsbdjListinfo;
 import com.example.well.luochen.utils.ActivityCompatUtils;
 import com.example.well.luochen.utils.FileHelper;
 import com.example.well.luochen.utils.ImageHelper;

@@ -18,9 +18,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.well.luochen.R;
-import com.example.well.luochen.net.HttpListener;
-import com.example.well.luochen.net.data.BsMusicResponse;
-import com.example.well.luochen.net.info.MusicListInfo;
+import com.example.well.luochen.net_okhttp.HttpListener;
+import com.example.well.luochen.net_okhttp.data.BsMusicResponse;
+import com.example.well.luochen.net_okhttp.info.MusicListInfo;
 import com.example.well.luochen.utils.GlideImageUtils;
 import com.example.well.luochen.utils.LogUtils;
 import com.example.well.luochen.utils.Player;

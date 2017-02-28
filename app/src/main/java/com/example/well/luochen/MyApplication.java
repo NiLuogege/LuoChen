@@ -11,7 +11,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.well.luochen.mode.activity.MainActivity;
-import com.example.well.luochen.net.NoHttpRequest;
+import com.example.well.luochen.net.rxretrofit.RxRetrofitApp;
+import com.example.well.luochen.net_okhttp.NoHttpRequest;
 import com.example.well.luochen.utils.SdUtil;
 import com.example.well.luochen.utils.SystemOpt;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -50,6 +51,7 @@ public class MyApplication extends Application {
         super.onCreate();
         application = this;
 
+        RxRetrofitApp.init(this);
         initSystem();
     }
 

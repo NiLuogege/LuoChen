@@ -14,10 +14,10 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
 import com.example.well.luochen.R;
-import com.example.well.luochen.net.HttpListener;
-import com.example.well.luochen.net.data.MVImageResponse;
-import com.example.well.luochen.net.info.MVImageBody;
-import com.example.well.luochen.net.info.MVImageInfo;
+import com.example.well.luochen.net_okhttp.HttpListener;
+import com.example.well.luochen.net_okhttp.data.MVImageResponse;
+import com.example.well.luochen.net_okhttp.info.MVImageBody;
+import com.example.well.luochen.net_okhttp.info.MVImageInfo;
 import com.example.well.luochen.utils.GlideUtils;
 import com.example.well.luochen.utils.RequestWhat;
 import com.example.well.luochen.utils.SpacesItemDecoration;

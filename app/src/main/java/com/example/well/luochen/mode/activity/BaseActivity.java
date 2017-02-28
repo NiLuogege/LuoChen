@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.well.luochen.MyApplication;
-import com.example.well.luochen.net.HttpListener;
-import com.example.well.luochen.net.NoHttpRequest;
+import com.example.well.luochen.net_okhttp.HttpListener;
+import com.example.well.luochen.net_okhttp.NoHttpRequest;
 import com.example.well.luochen.utils.ACache;
 import com.example.well.luochen.utils.TitleBar;
 
